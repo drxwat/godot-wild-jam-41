@@ -1,60 +1,81 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://core/player_boat/PlayerBoat.tscn" type="PackedScene" id=1]
 [ext_resource path="res://core/ui/hud/HUD.tscn" type="PackedScene" id=2]
-[ext_resource path="res://core/fish/Fish.tscn" type="PackedScene" id=3]
-[ext_resource path="res://core/stock/Stock.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/env/iseland-1.fbx" type="PackedScene" id=5]
-[ext_resource path="res://assets/env/left_bank.glb" type="PackedScene" id=6]
+[ext_resource path="res://terrain/t_data/data.hterrain" type="Resource" id=5]
+[ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=6]
+[ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=7]
 
 [sub_resource type="PlaneMesh" id=1]
-size = Vector2( 150, 150 )
+size = Vector2( 64, 64 )
 subdivide_width = 1
 subdivide_depth = 1
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=8]
 code = "shader_type spatial;
-render_mode blend_mix, specular_phong, unshaded;
+render_mode specular_phong, cull_disabled;
 
-uniform float speed : hint_range(-1,1) = 0.0;
+uniform float speed: hint_range(-1, 1) = 0.0;
 
-//colors
-uniform sampler2D noise1; //add Godot noise here
-uniform sampler2D noise2; //add Godot noise here
-uniform sampler2D normalmap : hint_normal; //add Godot noise here, enable as_normalmap
+uniform sampler2D noise1;
+uniform sampler2D noise2;
+uniform sampler2D normalmap: hint_normal;
+
 uniform vec4 color : hint_color;
-uniform vec4 edge_color : hint_color;
+uniform vec4 deep_water: hint_color;
 
-//foam
+//depth-fade var
+uniform float beer_law_factor = 2.0;
+uniform float _distance = 0.0;
+
+//foam var
+uniform vec4 edge_color: hint_color;
 uniform float edge_scale = 0.25;
 uniform float near = 0.1;
 uniform float far = 100f;
 
-//waves
-uniform vec2 wave_strengh = vec2(0.5, 0.25);
-uniform vec2 wave_frequency = vec2(12.0, 12.0);
+// wave var
+uniform vec2 wave_strength = vec2(0.5, 0.25);
+uniform vec2 wave_frequ = vec2(12.0, 12.0);
 uniform vec2 time_factor = vec2(1.0, 2.0);
 
+float waves(vec2 pos, float time) {
+	return (wave_strength.y * sin(pos.y * wave_frequ.y + time * time_factor.y)) + (wave_strength.x * sin(pos.x * wave_frequ.x + time * time_factor.x));
+}
 
+void vertex() {
+	VERTEX.y += waves(VERTEX.xy, TIME);
+}
 
-float rim(float depth){
+float rim(float depth) {
 	depth = 2f * depth - 1f;
 	return near * far / (far + depth * (near - far));
 }
 
+float calc_depth_fade(float depth, mat4 projection_matrix, 
+						vec4 fragcoord, float beer_factor, float __distance, vec3 vertex) {
+	
+	float scene_depth = depth;
 
-float waves(vec2 pos, float time){
-	return (wave_strengh.y * sin(pos.y * wave_frequency.y + time * time_factor.y)) + (wave_strengh.x * sin(pos.x * wave_frequency.x + time * time_factor.x));
+	scene_depth = scene_depth * 2.0 - 1.0;
+	scene_depth = projection_matrix[3][2] / (scene_depth + projection_matrix[2][2]);
+	scene_depth = scene_depth + vertex.z; // z is negative
+	
+	// application of beers law
+	scene_depth = exp(-scene_depth * beer_factor);
+	
+	float screen_depth = fragcoord.z;
+	
+	float depth_fade = (scene_depth - screen_depth) / __distance;
+	
+	depth_fade = clamp(depth_fade, 0.0, 1.0);
+	
+	return depth_fade;
 }
 
-
-void vertex(){
-	VERTEX.y += waves(VERTEX.xy, TIME);
-}
-
-
-void fragment(){
+void fragment() {
 	float time = TIME * speed;
+	
 	vec3 n1 = texture(noise1, UV + time).rgb;
 	vec3 n2 = texture(noise2, UV - time * 0.2).rgb;
 	
@@ -63,19 +84,23 @@ void fragment(){
 	
 	float sum = (n1.r + n2.r) - 1f;
 	
-	
 	float z_depth = rim(texture(DEPTH_TEXTURE, SCREEN_UV).x);
 	float z_pos = rim(FRAGCOORD.z);
 	float diff = z_depth - z_pos;
 	
-	vec2 displacement = vec2(sum * 0.05);
-	diff += displacement.x * 50f;
+	// depth-fade
+	float z_depth_fade = calc_depth_fade(texture(DEPTH_TEXTURE, SCREEN_UV).x, PROJECTION_MATRIX, FRAGCOORD, beer_law_factor, _distance, VERTEX);
+	float z_fade = rim(FRAGCOORD.z);
+	float fade_diff = z_depth_fade - z_fade;
 	
+	vec4 gradientcolor = mix(color, deep_water, z_depth_fade);
 	
-	vec4 col = mix(edge_color, color, step(edge_scale, diff));
+	vec2 displacement = vec2(sum * 0.1);
+	diff += displacement.x * 70f;
 	
-	vec4 alpha = vec4(1.0);
-	alpha = texture(SCREEN_TEXTURE, SCREEN_UV + displacement);
+	vec4 col = mix(edge_color, gradientcolor, step(edge_scale, diff));
+	
+	vec4 alpha = texture(SCREEN_TEXTURE, SCREEN_UV + displacement);
 	
 	
 	float fin = 0.0;
@@ -83,11 +108,12 @@ void fragment(){
 	if (sum > 0.4 && sum < 0.8) fin = 0.0;
 	if (sum > 0.8) fin = 1f;
 	
-	ALBEDO = vec3(fin) + mix(alpha.rgb, col.rgb, color.a);
+	// konvertier fin in vec3 um
+	ALBEDO = vec3(fin) + mix(alpha.rgb, col.rgb, gradientcolor.a);
 	
 	NORMALMAP = texture(normalmap, uv_movement).rgb;
+	
 	ROUGHNESS = 0.1;
-	SPECULAR = 1f;
 }"
 
 [sub_resource type="OpenSimplexNoise" id=4]
@@ -100,23 +126,37 @@ noise = SubResource( 4 )
 
 [sub_resource type="NoiseTexture" id=7]
 seamless = true
-as_normalmap = true
 noise = SubResource( 6 )
 
 [sub_resource type="ShaderMaterial" id=3]
 render_priority = -1
-shader = SubResource( 2 )
-shader_param/speed = 0.001
-shader_param/color = Color( 0.32549, 0.486275, 0.580392, 1 )
-shader_param/edge_color = Color( 0.223529, 0.4, 0.501961, 1 )
+shader = SubResource( 8 )
+shader_param/speed = 0.0
+shader_param/color = Color( 0.231373, 0.443137, 0.505882, 1 )
+shader_param/deep_water = null
+shader_param/beer_law_factor = 2.0
+shader_param/_distance = 0.0
+shader_param/edge_color = Color( 0.423529, 0.72549, 0.901961, 1 )
 shader_param/edge_scale = 0.25
 shader_param/near = 0.1
 shader_param/far = 100.0
-shader_param/wave_strengh = Vector2( 0.1, 0.025 )
-shader_param/wave_frequency = Vector2( 12, 12 )
+shader_param/wave_strength = Vector2( 0.125, 0.06 )
+shader_param/wave_frequ = Vector2( 12, 12 )
 shader_param/time_factor = Vector2( 1, 2 )
 shader_param/noise1 = SubResource( 5 )
 shader_param/noise2 = SubResource( 7 )
+
+[sub_resource type="Resource" id=9]
+script = ExtResource( 7 )
+mode = 0
+textures = [ [  ], [  ] ]
+
+[sub_resource type="ProceduralSky" id=12]
+
+[sub_resource type="Environment" id=13]
+background_mode = 2
+background_sky = SubResource( 12 )
+tonemap_mode = 3
 
 [node name="BaseLevel" type="Spatial"]
 
@@ -130,36 +170,27 @@ __meta__ = {
 [node name="HUD" parent="UI" instance=ExtResource( 2 )]
 
 [node name="Water" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.33652, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30.373, 0.614782, 32.4914 )
 mesh = SubResource( 1 )
 material/0 = SubResource( 3 )
 
-[node name="Fish" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.05932, 1, 3 )
-
-[node name="Fish5" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.05932, 1, -4 )
-
-[node name="Fish4" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.05932, 1, 3 )
-
-[node name="Fish2" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.05932, 1, 0 )
-
-[node name="Fish3" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.05932, 1, 6 )
-
-[node name="Stock" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, -4 )
-
-[node name="Stock2" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 5 )
-
 [node name="PlayerBoat" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.149529, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.158, 3.65, 27.715 )
 
-[node name="iseland-1" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.52692, -1.7413, 11.6449 )
+[node name="Camera" type="Camera" parent="PlayerBoat"]
+transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 10.948, 7.862 )
 
-[node name="left_bank" parent="." instance=ExtResource( 6 )]
-transform = Transform( 0.0345507, 0, 0.999403, 0, 1, 0, -0.999403, 0, 0.0345507, -53.676, -2.94957, 5.6618 )
+[node name="HTerrain" type="Spatial" parent="."]
+script = ExtResource( 6 )
+_terrain_data = ExtResource( 5 )
+chunk_size = 32
+collision_enabled = true
+collision_layer = 1
+collision_mask = 1
+shader_type = "LowPoly"
+custom_shader = null
+custom_globalmap_shader = null
+texture_set = SubResource( 9 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 13 )
