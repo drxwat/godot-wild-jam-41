@@ -1,0 +1,102 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://assets/ship/ship-1-demo.png" type="Texture" id=1]
+[ext_resource path="res://core/player_boat/PlayerBoat.gd" type="Script" id=2]
+[ext_resource path="res://assets/ship/ship-1-sh_05.png" type="Texture" id=3]
+[ext_resource path="res://assets/ship/ship-1-sh_07.png" type="Texture" id=4]
+[ext_resource path="res://assets/ship/ship-1-sh_04.png" type="Texture" id=5]
+[ext_resource path="res://assets/ship/ship-1-sh_02.png" type="Texture" id=6]
+[ext_resource path="res://assets/ship/ship-1-sh_03.png" type="Texture" id=7]
+[ext_resource path="res://assets/ship/ship-1-sh_01.png" type="Texture" id=8]
+[ext_resource path="res://assets/ship/ship-1-sh_06.png" type="Texture" id=9]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "move_top",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "move_top_right",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "move_down_right",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "move_top_left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "move_down_left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "move_left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "move_right",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "move_down",
+"speed": 5.0
+} ]
+
+[sub_resource type="CylinderShape" id=1]
+radius = 0.5
+height = 0.374788
+
+[sub_resource type="CylinderShape" id=2]
+height = 0.2
+
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 0.2, 0.2, 0.2 )
+
+[node name="PlayerBoat" type="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.639613, 0 )
+collision_layer = 2
+axis_lock_motion_y = true
+move_lock_y = true
+script = ExtResource( 2 )
+
+[node name="Sprite3D" type="AnimatedSprite3D" parent="."]
+billboard = 1
+frames = SubResource( 3 )
+animation = "move_down_right"
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 3.58542, 5.55692 )
+current = true
+
+[node name="FishPickupArea" type="Area" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="FishPickupArea"]
+shape = SubResource( 1 )
+
+[node name="StockArea" type="Area" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="StockArea"]
+shape = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0524085, 0 )
+shape = SubResource( 4 )
+
+[connection signal="body_entered" from="FishPickupArea" to="." method="_on_FishPickupArea_body_entered"]
+[connection signal="body_exited" from="FishPickupArea" to="." method="_on_FishPickupArea_body_exited"]
+[connection signal="body_entered" from="StockArea" to="." method="_on_StockArea_body_entered"]
