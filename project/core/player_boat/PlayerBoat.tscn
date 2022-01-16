@@ -53,9 +53,8 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CylinderShape" id=1]
-radius = 0.5
-height = 0.374788
+[sub_resource type="SphereShape" id=5]
+radius = 3.0
 
 [sub_resource type="CylinderShape" id=2]
 height = 0.2
@@ -79,7 +78,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape" type="CollisionShape" parent="FishPickupArea"]
-shape = SubResource( 1 )
+shape = SubResource( 5 )
 
 [node name="StockArea" type="Area" parent="."]
 collision_layer = 0
@@ -89,7 +88,7 @@ collision_mask = 8
 shape = SubResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.74308, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.73065, -1.0224 )
 shape = SubResource( 4 )
 
 [connection signal="body_entered" from="FishPickupArea" to="." method="_on_FishPickupArea_body_entered"]

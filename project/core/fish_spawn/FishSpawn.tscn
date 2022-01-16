@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://core/fish_spawn/FishSpawn.gd" type="Script" id=1]
+
+[sub_resource type="CylinderMesh" id=1]
+top_radius = 10.0
+bottom_radius = 10.0
+height = 0.2
+
+[node name="FishSpawn" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0657856, 0 )
+visible = false
+mesh = SubResource( 1 )
+material/0 = null

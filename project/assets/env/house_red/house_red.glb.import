@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/iseland-1.fbx-0ccf0b81dba90b16840d1f5b89b83de1.scn"
+path="res://.import/house_red.glb-89d258f7fcd5543a02cefc85a84411b0.scn"
 
 [deps]
 
-source_file="res://assets/env/iseland-1.fbx"
-dest_files=[ "res://.import/iseland-1.fbx-0ccf0b81dba90b16840d1f5b89b83de1.scn" ]
+source_file="res://assets/env/house_red/house_red.glb"
+dest_files=[ "res://.import/house_red.glb-89d258f7fcd5543a02cefc85a84411b0.scn" ]
 
 [params]
 

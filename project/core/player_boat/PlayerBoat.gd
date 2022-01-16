@@ -1,7 +1,7 @@
 extends KinematicBody
 
-onready var speed := 5.0
-onready var boat_hold_capacity = 3
+onready var speed := 8.0
+onready var boat_hold_capacity = 30
 
 var points = 0
 var pickup_candidate: Fish = null

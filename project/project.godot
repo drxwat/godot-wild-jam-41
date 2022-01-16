@@ -51,6 +51,7 @@ _global_script_class_icons={
 [application]
 
 config/name="godot-wild-jam-41"
+run/main_scene="res://levels/base_level/BaseLevel.tscn"
 config/icon="res://icon.png"
 
 [editor_plugins]
