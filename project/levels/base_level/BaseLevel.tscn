@@ -1,9 +1,8 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://core/player_boat/PlayerBoat.tscn" type="PackedScene" id=1]
 [ext_resource path="res://core/ui/hud/HUD.tscn" type="PackedScene" id=2]
 [ext_resource path="res://core/env_models/Jetty.tscn" type="PackedScene" id=3]
-[ext_resource path="res://core/env_models/HouseRed.tscn" type="PackedScene" id=4]
 [ext_resource path="res://terrain/t_data/data.hterrain" type="Resource" id=5]
 [ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=6]
 [ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=7]
@@ -170,9 +169,6 @@ background_mode = 2
 background_sky = SubResource( 12 )
 tonemap_mode = 3
 
-[sub_resource type="CylinderMesh" id=14]
-height = 9.175
-
 [node name="BaseLevel" type="Spatial"]
 
 [node name="UI" type="Control" parent="."]
@@ -190,7 +186,7 @@ mesh = SubResource( 1 )
 material/0 = SubResource( 3 )
 
 [node name="PlayerBoat" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40.1611, 3.65, 112.493 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40.1611, 3.65, 227.171 )
 
 [node name="Camera" type="Camera" parent="PlayerBoat"]
 transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 15.0032, 11.4644 )
@@ -219,25 +215,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 28.999, 0, 94.857 )
 spawn_time_base = 20.0
 radius = 15.0
 
-[node name="Jetty" parent="." instance=ExtResource( 3 )]
-transform = Transform( 0.684483, 0, -0.729028, 0, 1, 0, 0.729028, 0, 0.684483, 53.4723, 0.1707, 82.7723 )
-
-[node name="HouseRed" parent="." instance=ExtResource( 4 )]
-transform = Transform( 0.706292, 0, 0.707921, 0, 1, 0, -0.707921, 0, 0.706292, 60.4392, 1.85729, 74.1896 )
-
 [node name="Shark" parent="." instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 39.8969, -0.195338, 79.8121 )
-
-[node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( -0.00549775, 0.999985, 0, -0.999985, -0.00549775, 0, 0, 0, 1, 44.7463, -0.696912, 73.4735 )
-mesh = SubResource( 14 )
-material/0 = null
+transform = Transform( 0.92721, 0, -0.374542, 0, 1, 0, 0.374542, 0, 0.92721, 36.798, -0.332718, 175.736 )
 
 [node name="BoatSimple" parent="." instance=ExtResource( 10 )]
-transform = Transform( 0.346117, 0, -0.938191, 0, 1, 0, 0.938191, 0, 0.346117, 45.5672, 0.608496, 88.0432 )
+transform = Transform( -0.5539, 0, -0.832583, 0, 1, 0, 0.832583, 0, -0.5539, 52.1925, 0.608496, 191.53 )
 
 [node name="HouseYellow" parent="." instance=ExtResource( 11 )]
-transform = Transform( 0.573348, 0, 0.819312, 0, 1, 0, -0.819312, 0, 0.573348, 69.7768, 2.27464, 23.4581 )
+transform = Transform( 0.573348, 0, 0.819312, 0, 1, 0, -0.819312, 0, 0.573348, 59.4732, 4.55337, 180.671 )
 
 [node name="Jetty2" parent="." instance=ExtResource( 3 )]
-transform = Transform( 0.918398, 0, -0.395658, 0, 1, 0, 0.395658, 0, 0.918398, 67.5352, 0.362974, 31.5325 )
+transform = Transform( 0.838975, 0, -0.544171, 0, 1, 0, 0.544171, 0, 0.838975, 54.7593, 0.22478, 188.745 )
