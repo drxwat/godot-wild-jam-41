@@ -1,11 +1,18 @@
 extends KinematicBody
 
+signal danger_area_status
+
+export(NodePath) var navigation_node_path
+
 onready var speed := 8.0
 onready var boat_hold_capacity = 30
+onready var navigation : Navigation = get_node(navigation_node_path)
+onready var danger_position : Position3D = $Node/DangerPosition3D
 
 var points = 0
 var pickup_candidate: Fish = null
 var boat_hold := []
+var danger_pool_timeout = 2.0
 
 var directions = {
 	Vector3(1, 0, 1): "move_down_right",
@@ -20,7 +27,7 @@ var directions = {
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	poll_danger_position()
 
 
 func _physics_process(delta: float):
@@ -28,6 +35,13 @@ func _physics_process(delta: float):
 		pick_up_fish(pickup_candidate)
 	handle_move()
 
+
+func poll_danger_position():
+	yield(get_tree().create_timer(danger_pool_timeout), "timeout")
+	var path_to_danger_area = navigation.get_simple_path(global_transform.origin, danger_position.global_transform.origin)
+	print("danger" if path_to_danger_area.size() > 0 else "safe")
+	poll_danger_position()
+	
 
 func can_pick_up_fish(fish: Fish):
 	return boat_hold.size() < boat_hold_capacity

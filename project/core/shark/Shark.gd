@@ -5,7 +5,7 @@ const ROTATION_TRANSITION = 0.1
 export(NodePath) var navigation_node_path
 
 var rng = RandomNumberGenerator.new()
-var speed := 10
+var speed := 4.0
 
 onready var navigation : Navigation = get_node(navigation_node_path)
 onready var path_points: Node = $PathPoints
