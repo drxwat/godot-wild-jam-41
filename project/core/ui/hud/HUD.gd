@@ -3,6 +3,8 @@ extends Control
 var hold_element := preload("res://core/ui/hold_element/HoldElement.tscn")
 
 onready var hold_container := $MarginContainer/VBoxContainer/Row1/HoldContainer
+onready var fuel_bar := $MarginContainer/VBoxContainer/Row2/FuelBar
+
 var hold 
 
 # Called when the node enters the scene tree for the first time.
@@ -28,3 +30,9 @@ func resize_hold(capacity: int):
 	for i in range(capacity):
 		var element = hold_element.instance()
 		hold_container.add_child(element)
+
+
+func update_fuel_level(fuel_tupple):
+	fuel_bar.value = fuel_tupple[0]
+	fuel_bar.max_value = fuel_tupple[1]
+

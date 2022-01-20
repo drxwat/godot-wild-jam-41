@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://core/player_boat/PlayerBoat.tscn" type="PackedScene" id=1]
 [ext_resource path="res://core/ui/hud/HUD.tscn" type="PackedScene" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=7]
 [ext_resource path="res://core/fish_spawn/FishSpawn.tscn" type="PackedScene" id=8]
 [ext_resource path="res://core/env_models/HouseRed.tscn" type="PackedScene" id=9]
-[ext_resource path="res://core/env_models/BoatSimple.tscn" type="PackedScene" id=10]
 [ext_resource path="res://core/env_models/HouseYellow.tscn" type="PackedScene" id=11]
 [ext_resource path="res://core/env_models/HouseBlue.tscn" type="PackedScene" id=12]
 
@@ -226,11 +225,11 @@ __meta__ = {
 [node name="HUD" parent="UI" instance=ExtResource( 2 )]
 
 [node name="PlayerBoat" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 163.734, 0.0204992, 182.269 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 163.734, 0.412685, 182.269 )
 navigation_node_path = NodePath("../Navigation")
 
 [node name="Camera" type="Camera" parent="PlayerBoat"]
-transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 20, 11.464 )
+transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 33.13, 16.824 )
 far = 300.0
 
 [node name="Node" type="Node" parent="PlayerBoat"]
@@ -284,9 +283,6 @@ radius = 15.0
 [node name="FishSpawn11" parent="." instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.1245, 0, 165.025 )
 radius = 15.0
-
-[node name="BoatSimple" parent="." instance=ExtResource( 10 )]
-transform = Transform( -0.5539, 0, -0.832583, 0, 1, 0, 0.832583, 0, -0.5539, 52.1925, -0.156554, 191.53 )
 
 [node name="HouseYellow" parent="." instance=ExtResource( 11 )]
 transform = Transform( 0.783867, 0, 0.620929, 0, 1, 0, -0.620929, 0, 0.783867, 200.57, 1.22962, 40.6726 )
@@ -366,5 +362,6 @@ transform = Transform( 0.901516, 0, 0.432747, 0, 1, 0, -0.432747, 0, 0.901516, 6
 [node name="Jetty5" parent="." instance=ExtResource( 3 )]
 transform = Transform( -0.84085, 0, 0.541268, 0, 1, 0, -0.541268, 0, -0.84085, 116.366, -0.673506, 216.694 )
 
+[connection signal="fuel_level_changed" from="PlayerBoat" to="UI/HUD" method="update_fuel_level"]
 [connection signal="hold_changed" from="PlayerBoat" to="UI/HUD" method="update_hold"]
 [connection signal="hold_size_changed" from="PlayerBoat" to="UI/HUD" method="resize_hold"]

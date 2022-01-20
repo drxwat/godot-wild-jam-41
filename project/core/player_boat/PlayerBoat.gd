@@ -3,8 +3,10 @@ extends KinematicBody
 signal danger_area_status
 signal hold_changed
 signal hold_size_changed
+signal fuel_level_changed
 
-const ROTATION_TRANSITION = 2.0
+const ROTATION_TRANSITION = 0.2
+const FUEL_EMIT_PERIOD = 1.0
 
 export(NodePath) var navigation_node_path
 
@@ -20,12 +22,16 @@ var pickup_candidate: Fish = null
 var boat_hold := []
 var danger_pool_timeout = 2.0
 var current_move_direction = Vector3.ZERO
+var max_fuel_time := 60.0
+var fuel = max_fuel_time
+var emit_fuel_change = FUEL_EMIT_PERIOD
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	emit_signal("hold_size_changed", boat_hold_capacity)
 	emit_signal("hold_changed", boat_hold)
+	emit_signal("fuel_level_changed", [fuel, max_fuel_time])
 	poll_danger_position()
 
 
@@ -33,7 +39,7 @@ func _physics_process(delta: float):
 	if Input.is_action_just_pressed("pick_up") and pickup_candidate and can_pick_up_fish(pickup_candidate):
 		pick_up_fish(pickup_candidate)
 	update_fish_freshness(delta)
-	handle_move()
+	handle_move(delta)
 
 
 func update_fish_freshness(delta: float):
@@ -80,7 +86,7 @@ func _on_FishPickupArea_body_exited(fish: Fish):
 	fish.highlight_off()
 
 
-func handle_move():
+func handle_move(delta: float):
 	var move_direction = Vector3(
 		int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left")),
 		0,
@@ -89,23 +95,27 @@ func handle_move():
 	if move_direction.length() > 0 and move_direction != current_move_direction:
 		rotate_unit(move_direction)
 		current_move_direction = move_direction
+	if move_direction.length() > 0:
+		burn_fuel(delta)
 	move_and_slide(move_direction.normalized() * speed, Vector3.UP)
 
 
+func burn_fuel(delta: float):
+	fuel -= delta
+	emit_fuel_change -= delta
+	if emit_fuel_change <= 0:
+		emit_signal("fuel_level_changed", [fuel, max_fuel_time])
+
+
 func rotate_unit(move_direction):
-	pass
-#	var angle = atan2(move_direction.x, move_direction.z)
-#	gfx.rotate_y(angle)	
-#	tween.remove_all()
-#	var angle = atan2(move_direction.x, move_direction.z)
-#	var current_rotation = gfx.get_rotation()
-#	current_rotation.y -= PI
-#	var new_rotation = gfx.get_rotation()
-#	new_rotation.y = angle - PI
-#	print(current_rotation, new_rotation)
-#	tween.interpolate_property(gfx, "rotation",
-#		current_rotation, new_rotation, ROTATION_TRANSITION, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#	tween.start()
+	var angle = rad2deg(atan2(move_direction.x, move_direction.z))
+	var rotation = gfx.rotation_degrees.y - angle
+	if rotation > 180:
+		angle = angle + 360
+	elif rotation < -180:
+		angle = angle - 360
+	tween.interpolate_property(gfx, "rotation_degrees:y", gfx.rotation_degrees.y, angle, ROTATION_TRANSITION, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween.start()
 
 
 func _on_StockArea_body_entered(body: Stock):

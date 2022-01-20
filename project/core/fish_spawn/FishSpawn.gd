@@ -17,7 +17,6 @@ func _ready():
 	$MeshInstance.mesh = CylinderMesh.new()
 	$MeshInstance.mesh.top_radius = radius
 	max_fish = ceil(radius * max_amount_raduis_fraction)
-	print(max_fish)
 	if !Engine.is_editor_hint():
 		rng.randomize()
 		spawn_fish()
