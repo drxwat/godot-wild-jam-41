@@ -1,14 +1,30 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://assets/DancingScript-VariableFont_wght.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/MochiyPopPOne-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://core/ui/hud/HUD.gd" type="Script" id=2]
+[ext_resource path="res://assets/ui/money.png" type="Texture" id=3]
+[ext_resource path="res://assets/ui/empty_gas.png" type="Texture" id=4]
+[ext_resource path="res://assets/ui/full_gas.png" type="Texture" id=5]
+[ext_resource path="res://core/ui/hud_inner_styleboxflat.tres" type="StyleBox" id=6]
+[ext_resource path="res://core/ui/hud_inner_2_styleboxflat.tres" type="StyleBox" id=7]
 
 [sub_resource type="DynamicFont" id=3]
-size = 48
+size = 36
+outline_size = 5
+outline_color = Color( 0.243137, 0.243137, 0.243137, 1 )
 font_data = ExtResource( 1 )
 
 [sub_resource type="Theme" id=2]
 default_font = SubResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 24
+outline_size = 5
+outline_color = Color( 0.243137, 0.243137, 0.243137, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=5]
+default_font = SubResource( 4 )
 
 [node name="HUD" type="Control"]
 anchor_right = 1.0
@@ -25,7 +41,7 @@ anchor_bottom = 1.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
-custom_constants/margin_bottom = 10
+custom_constants/margin_bottom = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -34,62 +50,136 @@ __meta__ = {
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1014.0
-margin_bottom = 590.0
+margin_bottom = 596.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Row1" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 margin_right = 1004.0
-margin_bottom = 64.0
+margin_bottom = 53.0
+alignment = 2
 
-[node name="HoldContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Row1"]
-margin_bottom = 64.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="AreaLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar"]
+margin_left = 750.0
+margin_right = 1004.0
+margin_bottom = 53.0
+custom_colors/font_color = Color( 0.396078, 0.658824, 0.129412, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "SAFE AREA"
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/Row1"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer"]
+margin_top = 57.0
+margin_right = 1004.0
+margin_bottom = 510.0
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 514.0
+margin_right = 1004.0
+margin_bottom = 586.0
+theme = SubResource( 5 )
+
+[node name="Row1" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CenterContainer"]
+margin_left = 376.0
+margin_right = 628.0
+margin_bottom = 72.0
+custom_constants/separation = 50
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1"]
+margin_right = 72.0
+margin_bottom = 72.0
+custom_styles/panel = ExtResource( 6 )
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer"]
+margin_right = 72.0
+margin_bottom = 72.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer/MarginContainer"]
 margin_left = 4.0
-margin_right = 890.0
-margin_bottom = 64.0
-size_flags_horizontal = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_top = 4.0
+margin_right = 68.0
+margin_bottom = 68.0
+custom_styles/panel = ExtResource( 7 )
 
-[node name="Money" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Row1"]
-margin_left = 894.0
-margin_right = 1004.0
-margin_bottom = 64.0
-custom_constants/separation = 16
-
-[node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer/Row1/Money"]
+[node name="FuelBar" type="TextureProgress" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer/MarginContainer/PanelContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
-color = Color( 0.803922, 0.843137, 0.329412, 1 )
-
-[node name="MoneyLabel" type="Label" parent="MarginContainer/VBoxContainer/Row1/Money"]
-margin_left = 80.0
-margin_top = 2.0
-margin_right = 110.0
-margin_bottom = 61.0
-text = "0"
-
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer"]
-margin_top = 68.0
-margin_right = 1004.0
-margin_bottom = 512.0
-size_flags_vertical = 3
-
-[node name="Row2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_top = 516.0
-margin_right = 1004.0
-margin_bottom = 580.0
-
-[node name="FuelBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/Row2"]
-margin_right = 256.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 256, 64 )
+value = 36.0
 rounded = true
+texture_under = ExtResource( 4 )
+texture_progress = ExtResource( 5 )
+fill_mode = 3
+tint_progress = Color( 0.670588, 0, 0, 1 )
+nine_patch_stretch = true
+
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1"]
+margin_left = 122.0
+margin_right = 130.0
+margin_bottom = 72.0
+custom_styles/panel = ExtResource( 6 )
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer2"]
+margin_right = 8.0
+margin_bottom = 72.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="HoldContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer2/MarginContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 4.0
+margin_bottom = 68.0
+custom_constants/separation = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer3" type="PanelContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1"]
+margin_left = 180.0
+margin_right = 252.0
+margin_bottom = 72.0
+custom_styles/panel = ExtResource( 6 )
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer3"]
+margin_right = 72.0
+margin_bottom = 72.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer3/MarginContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 68.0
+margin_bottom = 68.0
+custom_styles/panel = ExtResource( 7 )
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer3/MarginContainer/PanelContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="MoneyLabel" type="Label" parent="MarginContainer/VBoxContainer/CenterContainer/Row1/PanelContainer3/MarginContainer/PanelContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+size_flags_vertical = 7
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "0"
+align = 2
+valign = 2
+
+[node name="Tween" type="Tween" parent="."]

@@ -1,18 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://core/ui/hold_element/HoldElement.gd" type="Script" id=1]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.329412, 0.329412, 0.329412, 0.560784 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.435294, 0.431373, 0.431373, 1 )
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+[ext_resource path="res://core/ui/hud_inner_2_styleboxflat.tres" type="StyleBox" id=2]
 
 [node name="HoldElement" type="PanelContainer"]
 anchor_right = 1.0
@@ -21,25 +10,24 @@ margin_right = -960.0
 margin_bottom = -536.0
 rect_min_size = Vector2( 64, 64 )
 rect_scale = Vector2( 0.125, 0.125 )
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = ExtResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_left = 1.0
-margin_top = 1.0
-margin_right = 63.0
-margin_bottom = 63.0
+margin_right = 64.0
+margin_bottom = 64.0
 expand = true
 
-[node name="TTL" type="Label" parent="TextureRect"]
-margin_left = 7.0
-margin_top = 23.0
-margin_right = 55.0
-margin_bottom = 37.0
-align = 1
+[node name="TTL" type="Label" parent="."]
+margin_right = 64.0
+margin_bottom = 64.0
+size_flags_vertical = 7
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+align = 2
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

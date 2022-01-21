@@ -11,7 +11,7 @@ var update_period := 1.0
 var time_to_update := update_period
 
 onready var texture_rect := $TextureRect
-onready var ttl := $TextureRect/TTL
+onready var ttl := $TTL
 
 func _process(delta):
 	if fish_meta:

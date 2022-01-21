@@ -231,7 +231,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 163.734, 0.412685, 182.269 )
 navigation_node_path = NodePath("../Navigation")
 
 [node name="Camera" type="Camera" parent="PlayerBoat"]
-transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 33.13, 16.824 )
+transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 33.13, 22.63 )
 far = 300.0
 
 [node name="Node" type="Node" parent="PlayerBoat"]
@@ -377,9 +377,18 @@ transform = Transform( -0.84085, 0, 0.541268, 0, 1, 0, -0.541268, 0, -0.84085, 1
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 130.717, 0, 163.263 )
 
 [node name="Fish2" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 130.717, 0, 186.813 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 147.026, 0, 186.813 )
 fish_type = 1
 
+[node name="Fish3" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 174.63, 0, 163.939 )
+fish_type = 1
+
+[node name="Fish4" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 175.614, 0, 194.598 )
+fish_type = 1
+
+[connection signal="area_changed" from="PlayerBoat" to="UI/HUD" method="change_area"]
 [connection signal="fuel_level_changed" from="PlayerBoat" to="UI/HUD" method="update_fuel_level"]
 [connection signal="hold_changed" from="PlayerBoat" to="UI/HUD" method="update_hold"]
 [connection signal="hold_size_changed" from="PlayerBoat" to="UI/HUD" method="resize_hold"]

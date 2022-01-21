@@ -1,11 +1,13 @@
 extends KinematicBody
 
 const ROTATION_TRANSITION = 0.1
+const PATH_TO_TARGET_PERIOD = 0.2
 
 export(NodePath) var navigation_node_path
 
 var rng = RandomNumberGenerator.new()
 var speed := 4.0
+var chase_speed := 9.0
 
 onready var navigation : Navigation = get_node(navigation_node_path)
 onready var path_points: Node = $PathPoints
@@ -13,6 +15,9 @@ onready var tween = $Tween
 
 var patroll_targets := []
 var path: PoolVector3Array
+var target: Spatial
+var is_target_reachable := false
+var time_to_path_find = PATH_TO_TARGET_PERIOD
 
 func _ready():
 	rng.randomize()
@@ -20,10 +25,30 @@ func _ready():
 	find_random_path()
 
 func _process(delta: float):
+	if target:
+		time_to_path_find -= delta
+		if time_to_path_find <= 0:
+			time_to_path_find = PATH_TO_TARGET_PERIOD
+			var path_to_target = navigation.get_simple_path(global_transform.origin, target.global_transform.origin)
+			print('calculating path')
+			if path_to_target.size() > 0:
+				is_target_reachable = true
+			else:
+				is_target_reachable = false
+	if target and is_target_reachable:
+		chase_target()
+		return
+	
 	if not path.empty():
 		_move_along_path()
 	else:
 		find_random_path()
+
+func chase_target():
+	print('chasing')
+	var move_vector = global_transform.origin.direction_to(target.global_transform.origin)
+	_rotate_unit(move_vector)
+	move_and_slide(move_vector.normalized() * chase_speed, Vector3.UP)
 
 func find_random_path():
 	if patroll_targets.size() > 0:
@@ -45,3 +70,11 @@ func _rotate_unit(move_direction: Vector3):
 	tween.interpolate_property($".", "rotation",
 		get_rotation(), new_rotation, ROTATION_TRANSITION, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.start()
+
+
+func _on_AttackArea_body_entered(player):
+	target = player
+
+
+func _on_AttackArea_body_exited(body):
+	target = null

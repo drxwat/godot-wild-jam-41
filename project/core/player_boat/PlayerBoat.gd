@@ -1,6 +1,6 @@
 extends KinematicBody
 
-signal danger_area_status
+signal area_changed
 signal hold_changed
 signal hold_size_changed
 signal fuel_level_changed
@@ -21,11 +21,12 @@ onready var gfx := $gfx
 var points = 100
 var pickup_candidate: Fish = null
 var boat_hold := []
-var danger_pool_timeout = 2.0
+var danger_pool_timeout = 0.5
 var current_move_direction = Vector3.ZERO
 var max_fuel_time := 60.0
 var fuel = max_fuel_time
 var emit_fuel_change = FUEL_EMIT_PERIOD
+var danger_area = Enums.AreaType.SAFE
 
 
 # Called when the node enters the scene tree for the first time.
@@ -34,6 +35,7 @@ func _ready():
 	emit_signal("hold_changed", boat_hold)
 	emit_signal("fuel_level_changed", [fuel, max_fuel_time])
 	emit_signal("points_changed", points)
+	emit_signal("area_changed", danger_area)
 	poll_danger_position()
 
 
@@ -54,7 +56,6 @@ func update_fish_freshness(delta: float):
 			remove_candidate_i = i
 		i += 1
 	if remove_candidate_i != null:
-		print('remove')
 		boat_hold.remove(remove_candidate_i)
 		emit_signal("hold_changed", boat_hold)
 			
@@ -62,7 +63,10 @@ func update_fish_freshness(delta: float):
 func poll_danger_position():
 	yield(get_tree().create_timer(danger_pool_timeout), "timeout")
 	var path_to_danger_area = navigation.get_simple_path(global_transform.origin, danger_position.global_transform.origin)
-	print("danger" if path_to_danger_area.size() > 0 else "safe")
+	var new_area = Enums.AreaType.DANGER if path_to_danger_area.size() > 0 else Enums.AreaType.SAFE
+	if new_area != danger_area:
+		danger_area = new_area
+		emit_signal("area_changed", danger_area)
 	poll_danger_position()
 	
 
@@ -126,7 +130,7 @@ func rotate_unit(move_direction):
 
 func _on_StockArea_body_entered(stock: Stock):
 	var has_sold_something = false
-	for fish_meta in boat_hold:
+	for fish_meta in boat_hold.duplicate():
 		if stock.is_universal or stock.stock_fish_type == fish_meta.fish_type:
 			points += fish_meta.value
 			boat_hold.erase(fish_meta)
@@ -134,5 +138,4 @@ func _on_StockArea_body_entered(stock: Stock):
 	if has_sold_something:
 		emit_signal("hold_changed", boat_hold)
 		emit_signal("points_changed", points)
-		print("sold")
 
