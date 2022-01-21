@@ -4,20 +4,21 @@ signal danger_area_status
 signal hold_changed
 signal hold_size_changed
 signal fuel_level_changed
+signal points_changed
 
 const ROTATION_TRANSITION = 0.2
 const FUEL_EMIT_PERIOD = 1.0
 
 export(NodePath) var navigation_node_path
 
-onready var speed := 8.0
+onready var speed := 10.0
 onready var boat_hold_capacity = 5
 onready var navigation : Navigation = get_node(navigation_node_path)
 onready var danger_position : Position3D = $Node/DangerPosition3D
 onready var tween := $Tween
 onready var gfx := $gfx
 
-var points = 0
+var points = 100
 var pickup_candidate: Fish = null
 var boat_hold := []
 var danger_pool_timeout = 2.0
@@ -32,6 +33,7 @@ func _ready():
 	emit_signal("hold_size_changed", boat_hold_capacity)
 	emit_signal("hold_changed", boat_hold)
 	emit_signal("fuel_level_changed", [fuel, max_fuel_time])
+	emit_signal("points_changed", points)
 	poll_danger_position()
 
 
@@ -43,15 +45,18 @@ func _physics_process(delta: float):
 
 
 func update_fish_freshness(delta: float):
-	var remove_candidate_i: int
+	var remove_candidate_i = null
 	var i := 0
 	for fish in boat_hold:
 		fish.time_to_deliver -= delta
 		if fish.time_to_deliver <= 0:
+			print("candidate to remove")
 			remove_candidate_i = i
 		i += 1
-	boat_hold.remove(remove_candidate_i)
-	emit_signal("hold_changed", boat_hold)
+	if remove_candidate_i != null:
+		print('remove')
+		boat_hold.remove(remove_candidate_i)
+		emit_signal("hold_changed", boat_hold)
 			
 
 func poll_danger_position():
@@ -67,6 +72,7 @@ func can_pick_up_fish(fish: Fish):
 
 func pick_up_fish(fish: Fish):
 	boat_hold.append(fish.meta)
+	print(boat_hold.size())
 	emit_signal("hold_changed", boat_hold)
 	fish.remove_self()
 
@@ -118,8 +124,15 @@ func rotate_unit(move_direction):
 	tween.start()
 
 
-func _on_StockArea_body_entered(body: Stock):
+func _on_StockArea_body_entered(stock: Stock):
+	var has_sold_something = false
 	for fish_meta in boat_hold:
-		points += fish_meta.value
-	boat_hold.clear()
-	print("CLEAR", points, boat_hold)
+		if stock.is_universal or stock.stock_fish_type == fish_meta.fish_type:
+			points += fish_meta.value
+			boat_hold.erase(fish_meta)
+			has_sold_something = true
+	if has_sold_something:
+		emit_signal("hold_changed", boat_hold)
+		emit_signal("points_changed", points)
+		print("sold")
+

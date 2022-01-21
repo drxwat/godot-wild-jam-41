@@ -14,6 +14,7 @@ onready var particles := $Particles
 
 
 func _ready():
+	initialize(fish_type)
 	var material = SpatialMaterial.new()
 	material.albedo_color = fish_type_colors.get(fish_type)
 	particles.draw_pass_1.surface_set_material(0, material)
