@@ -1,10 +1,14 @@
 extends KinematicBody
 
+const FUEL_PENALTY = 240
+
 signal area_changed
 signal hold_changed
 signal hold_size_changed
 signal fuel_level_changed
 signal points_changed
+signal wasted
+signal game_over
 
 const ROTATION_TRANSITION = 0.2
 const FUEL_EMIT_PERIOD = 1.0
@@ -18,7 +22,7 @@ onready var danger_position : Position3D = $Node/DangerPosition3D
 onready var tween := $Tween
 onready var gfx := $gfx
 
-var points = 100
+var points = 500
 var pickup_candidate: Fish = null
 var boat_hold := []
 var danger_pool_timeout = 0.5
@@ -71,12 +75,10 @@ func _physics_process(delta: float):
 
 
 func sound_process():
-	if is_moving:
-		if not $EngineNoise.playing:
-			$EngineNoise.play()
-	else:
-		if $EngineNoise.playing:
-			$EngineNoise.stop()
+	if is_moving and not $EngineNoise.playing:
+		$EngineNoise.play()
+	elif not is_moving and $EngineNoise.playing:
+		$EngineNoise.stop()
 
 
 func update_fish_freshness(delta: float):
@@ -148,6 +150,10 @@ func burn_fuel(delta: float):
 	emit_fuel_change -= delta
 	if emit_fuel_change <= 0:
 		emit_signal("fuel_level_changed", [fuel, max_fuel_time])
+	if fuel <= 0 and points > FUEL_PENALTY:
+		emit_signal("wasted", "OUT OF FUEL", points, FUEL_PENALTY)
+	elif fuel <= 0:
+		emit_signal("game_over")
 
 
 func rotate_unit(move_direction):

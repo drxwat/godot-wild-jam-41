@@ -1,5 +1,8 @@
 extends KinematicBody
 
+signal chasing
+signal lose_target
+
 const ROTATION_TRANSITION = 0.1
 const PATH_TO_TARGET_PERIOD = 0.8
 
@@ -81,8 +84,10 @@ func find_return_path(old_path: PoolVector3Array):
 		path = new_path
 
 func _on_AttackArea_body_entered(player):
+	emit_signal("chasing")
 	target = player
 
 
 func _on_AttackArea_body_exited(body):
 	target = null
+	emit_signal("lose_target")

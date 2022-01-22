@@ -12,4 +12,4 @@ dest_files=[ "res://.import/engine-noise.mp3-762af3796f0431e41756e9afd1135149.mp
 [params]
 
 loop=true
-loop_offset=0
+loop_offset=0.175

@@ -6,7 +6,7 @@
 [sub_resource type="SphereShape" id=1]
 radius = 35.0
 
-[node name="Shark" type="KinematicBody"]
+[node name="Shark" type="KinematicBody" groups=["sharks"]]
 script = ExtResource( 2 )
 
 [node name="Shark" parent="." instance=ExtResource( 1 )]

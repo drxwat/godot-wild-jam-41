@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/ui/money.png" type="Texture" id=1]
+[ext_resource path="res://assets/MochiyPopPOne-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://core/ui/wasted_overlay/WastedOverlay.gd" type="Script" id=3]
+
+[sub_resource type="DynamicFont" id=19]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=20]
+default_font = SubResource( 19 )
+
+[sub_resource type="StyleBoxFlat" id=18]
+bg_color = Color( 0.14902, 0.14902, 0.14902, 1 )
+
+[sub_resource type="DynamicFont" id=22]
+size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=21]
+emission_shape = 2
+emission_box_extents = Vector3( 500, 300, 1 )
+flag_disable_z = true
+direction = Vector3( 0, -1, 0 )
+spread = 0.0
+gravity = Vector3( 0, -98, 0 )
+initial_velocity = 200.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 1.0
+hue_variation = 0.15
+hue_variation_random = 1.0
+
+[node name="WastedOverlay" type="PanelContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 20 )
+custom_styles/panel = SubResource( 18 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 346.0
+margin_top = 178.0
+margin_right = 677.0
+margin_bottom = 422.0
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+margin_right = 331.0
+margin_bottom = 94.0
+text = "WASTED"
+
+[node name="ReasonLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+margin_top = 98.0
+margin_right = 331.0
+margin_bottom = 146.0
+custom_fonts/font = SubResource( 22 )
+text = "REASON"
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+margin_top = 150.0
+margin_right = 331.0
+margin_bottom = 244.0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+margin_left = 53.0
+margin_right = 133.0
+margin_bottom = 94.0
+rect_min_size = Vector2( 80, 80 )
+texture = ExtResource( 1 )
+expand = true
+
+[node name="Money" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+margin_left = 137.0
+margin_right = 278.0
+margin_bottom = 94.0
+text = "100"
+valign = 1
+
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( 507, 419 )
+amount = 50
+preprocess = 10.0
+process_material = SubResource( 21 )
