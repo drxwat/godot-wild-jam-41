@@ -33,7 +33,6 @@ func _process(delta: float):
 		if time_to_path_find <= 0:
 			time_to_path_find = PATH_TO_TARGET_PERIOD
 			var path_to_target = navigation.get_simple_path(global_transform.origin, target.global_transform.origin)
-			print('calculating path')
 			if path_to_target.size() > 0:
 				is_target_reachable = true
 			else:
@@ -91,3 +90,10 @@ func _on_AttackArea_body_entered(player):
 func _on_AttackArea_body_exited(body):
 	target = null
 	emit_signal("lose_target")
+
+
+func _on_RobArea_body_entered(body: Spatial):
+	if body.has_method("die_from_shark"):
+		body.die_from_shark()
+		target = null
+		emit_signal("lose_target")

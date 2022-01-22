@@ -8,7 +8,7 @@ signal penalty_finished
 onready var particles := $Particles2D
 onready var money_label := $CenterContainer/VBoxContainer/HBoxContainer/Money
 onready var reason_label := $CenterContainer/VBoxContainer/ReasonLabel
-
+onready var animation_player := $AnimationPlayer
 
 var is_penalty_in_progress := false
 var time_to_penalty := PENALTY_DELAY
@@ -21,7 +21,7 @@ func _process(delta):
 		time_to_penalty -= delta
 		if time_to_penalty <= 0:
 			penalty_interpolation += delta / PENALTY_TIME
-			money_label.text = String(money - (penalty * penalty_interpolation))
+			money_label.text = String(floor(money - (penalty * penalty_interpolation)))
 		if penalty_interpolation >= 1.0:
 			is_penalty_in_progress = false
 			emit_signal("penalty_finished")
@@ -36,6 +36,8 @@ func show_overlay(reason: String, _money: int, _penalty: int):
 	particles.emitting = true
 	money_label.text = String(_money)
 	reason_label.text = reason
+	animation_player.play("show")
+	yield(animation_player, "animation_finished")
 	is_penalty_in_progress = true
 
 

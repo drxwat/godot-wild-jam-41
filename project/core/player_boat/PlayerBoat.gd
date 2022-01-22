@@ -1,6 +1,7 @@
 extends KinematicBody
 
-const FUEL_PENALTY = 240
+const FUEL_PENALTY = 340
+const SHARK_PENALTY = 300
 
 signal area_changed
 signal hold_changed
@@ -12,6 +13,8 @@ signal game_over
 
 const ROTATION_TRANSITION = 0.2
 const FUEL_EMIT_PERIOD = 1.0
+const LOW_FUEL_SPEED_MOD = 0.7
+const LOW_FUEL_BOUNDARY = 0.2
 
 export(NodePath) var navigation_node_path
 
@@ -21,14 +24,16 @@ onready var navigation : Navigation = get_node(navigation_node_path)
 onready var danger_position : Position3D = $Node/DangerPosition3D
 onready var tween := $Tween
 onready var gfx := $gfx
+onready var engine_noise := $EngineNoise
 
+var is_disabled := false
 var points = 500
 var pickup_candidate: Fish = null
 var boat_hold := []
 var danger_pool_timeout = 0.5
 var current_move_direction = Vector3.ZERO
 var max_fuel_time := 120.0
-var fuel = max_fuel_time / 2
+var fuel = 5.0
 var emit_fuel_change = FUEL_EMIT_PERIOD
 var danger_area = Enums.AreaType.SAFE
 var gas_station
@@ -49,13 +54,14 @@ func _ready():
 
 
 func _physics_process(delta: float):
+	if is_disabled:
+		return
 	update_fish_freshness(delta)
 	if Input.is_action_pressed("pick_up") and gas_station and fuel < max_fuel_time and points > 0:
 		var fuel_to_buy = ceil(delta * fuel_buying_speed)
 		var fuel_price = fuel_to_buy * gas_station.fuel_price
 		fuel += fuel_to_buy
 		points -= fuel_price
-		print(fuel_to_buy, fuel_price)
 		emit_signal("fuel_level_changed", [fuel, max_fuel_time])
 		emit_signal("points_changed", points)
 		return
@@ -74,11 +80,28 @@ func _physics_process(delta: float):
 	handle_move(delta)
 
 
+func die_from_shark():
+	is_disabled = true
+	if points >= SHARK_PENALTY:
+		emit_signal("wasted", "ROBED BY SHARK", points, SHARK_PENALTY)
+
+func respawn(position: Vector3, penalty: int):
+	is_disabled = false
+	global_transform.origin = position
+	print("points", points, "penalty", penalty)
+	points -= penalty
+	fuel = max_fuel_time
+	boat_hold.clear()
+	emit_signal("fuel_level_changed", [fuel, max_fuel_time])
+	emit_signal("hold_changed", boat_hold)
+	emit_signal("points_changed", points)
+
+
 func sound_process():
-	if is_moving and not $EngineNoise.playing:
-		$EngineNoise.play()
-	elif not is_moving and $EngineNoise.playing:
-		$EngineNoise.stop()
+	if is_moving and not engine_noise.playing:
+		engine_noise.play()
+	elif not is_moving and engine_noise.playing:
+		engine_noise.stop()
 
 
 func update_fish_freshness(delta: float):
@@ -87,7 +110,6 @@ func update_fish_freshness(delta: float):
 	for fish in boat_hold:
 		fish.time_to_deliver -= delta
 		if fish.time_to_deliver <= 0:
-			print("candidate to remove")
 			remove_candidate_i = i
 		i += 1
 	if remove_candidate_i != null:
@@ -111,7 +133,6 @@ func can_pick_up_fish(fish: Fish):
 
 func pick_up_fish(fish: Fish):
 	boat_hold.append(fish.meta)
-	print(boat_hold.size())
 	emit_signal("hold_changed", boat_hold)
 	fish.remove_self()
 
@@ -140,9 +161,14 @@ func handle_move(delta: float):
 	if move_direction.length() > 0 and move_direction != current_move_direction:
 		rotate_unit(move_direction)
 		current_move_direction = move_direction
+
+	var fuel_modifier = LOW_FUEL_SPEED_MOD if fuel / max_fuel_time <= LOW_FUEL_BOUNDARY else 1.0
+	if engine_noise.pitch_scale != fuel_modifier:
+		engine_noise.pitch_scale = fuel_modifier
 	if move_direction.length() > 0:
-		burn_fuel(delta)
-	move_and_slide(move_direction.normalized() * speed, Vector3.UP)
+		burn_fuel(delta * fuel_modifier)
+	if fuel > 0:
+		move_and_slide(move_direction.normalized() * speed * fuel_modifier, Vector3.UP)
 
 
 func burn_fuel(delta: float):
@@ -152,8 +178,10 @@ func burn_fuel(delta: float):
 		emit_signal("fuel_level_changed", [fuel, max_fuel_time])
 	if fuel <= 0 and points > FUEL_PENALTY:
 		emit_signal("wasted", "OUT OF FUEL", points, FUEL_PENALTY)
+		is_disabled = true
 	elif fuel <= 0:
 		emit_signal("game_over")
+		is_disabled = true
 
 
 func rotate_unit(move_direction):

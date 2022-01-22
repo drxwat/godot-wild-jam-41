@@ -240,7 +240,7 @@ __meta__ = {
 [node name="WastedOverlay" parent="UI" instance=ExtResource( 17 )]
 
 [node name="PlayerBoat" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 115.634, 0.412685, 193.196 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 118.777, 0.412685, 212.549 )
 navigation_node_path = NodePath("../Navigation")
 
 [node name="Camera" type="Camera" parent="PlayerBoat"]
@@ -420,4 +420,4 @@ transform = Transform( 0.492029, 0, -0.870579, 0, 1, 0, 0.870579, 0, 0.492029, 1
 [connection signal="hold_changed" from="PlayerBoat" to="UI/HUD" method="update_hold"]
 [connection signal="hold_size_changed" from="PlayerBoat" to="UI/HUD" method="resize_hold"]
 [connection signal="points_changed" from="PlayerBoat" to="UI/HUD" method="update_money"]
-[connection signal="wasted" from="PlayerBoat" to="UI/WastedOverlay" method="show_overlay"]
+[connection signal="wasted" from="PlayerBoat" to="." method="on_wasted"]
