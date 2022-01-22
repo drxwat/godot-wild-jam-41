@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/engine-noise.mp3-762af3796f0431e41756e9afd1135149.mp3str"
+
+[deps]
+
+source_file="res://sounds/ambiences/engine-noise.mp3"
+dest_files=[ "res://.import/engine-noise.mp3-762af3796f0431e41756e9afd1135149.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -29,6 +29,8 @@ var emit_fuel_change = FUEL_EMIT_PERIOD
 var danger_area = Enums.AreaType.SAFE
 var gas_station
 
+var is_moving: bool = false
+
 var fuel_buying_speed = 50.0
 var fuel_bought = 0.0
 
@@ -55,7 +57,26 @@ func _physics_process(delta: float):
 		return
 	elif Input.is_action_just_pressed("pick_up") and pickup_candidate and can_pick_up_fish(pickup_candidate):
 		pick_up_fish(pickup_candidate)
+	
+	if Input.is_action_pressed("ui_up") or \
+	Input.is_action_pressed("ui_down") or \
+	Input.is_action_pressed("ui_right") or \
+	Input.is_action_pressed("ui_left"):
+		is_moving = true
+	else:
+		is_moving = false
+	
+	sound_process()
 	handle_move(delta)
+
+
+func sound_process():
+	if is_moving:
+		if not $EngineNoise.playing:
+			$EngineNoise.play()
+	else:
+		if $EngineNoise.playing:
+			$EngineNoise.stop()
 
 
 func update_fish_freshness(delta: float):
