@@ -38,9 +38,9 @@ func _process(delta: float):
 	if target and is_target_reachable:
 		chase_target()
 		return
-	elif target and not path.empty(): # not_reachable
-		find_return_path(path)
-	
+#	elif target and not path.empty(): # not_reachable
+#		find_return_path(path)
+#
 	if not path.empty():
 		_move_along_path()
 	else:
