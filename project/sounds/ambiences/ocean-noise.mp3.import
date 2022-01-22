@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ocean-noise.mp3-c3a3114a3cb23f2cfeb5e69cb53073cb.mp3str"
+
+[deps]
+
+source_file="res://sounds/ambiences/ocean-noise.mp3"
+dest_files=[ "res://.import/ocean-noise.mp3-c3a3114a3cb23f2cfeb5e69cb53073cb.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
