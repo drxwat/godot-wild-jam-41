@@ -240,7 +240,7 @@ __meta__ = {
 [node name="WastedOverlay" parent="UI" instance=ExtResource( 17 )]
 
 [node name="PlayerBoat" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 118.777, 0.412685, 212.549 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 169.272, 0.412685, 184.727 )
 navigation_node_path = NodePath("../Navigation")
 
 [node name="Camera" type="Camera" parent="PlayerBoat"]

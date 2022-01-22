@@ -2,6 +2,7 @@ extends KinematicBody
 
 const FUEL_PENALTY = 340
 const SHARK_PENALTY = 300
+const COLOR_BONUS_EXP = 1.8
 
 signal area_changed
 signal hold_changed
@@ -25,6 +26,7 @@ onready var danger_position : Position3D = $Node/DangerPosition3D
 onready var tween := $Tween
 onready var gfx := $gfx
 onready var engine_noise := $EngineNoise
+onready var text_popup := $TextPopup
 
 var is_disabled := false
 var points = 500
@@ -33,7 +35,7 @@ var boat_hold := []
 var danger_pool_timeout = 0.5
 var current_move_direction = Vector3.ZERO
 var max_fuel_time := 120.0
-var fuel = 5.0
+var fuel = max_fuel_time
 var emit_fuel_change = FUEL_EMIT_PERIOD
 var danger_area = Enums.AreaType.SAFE
 var gas_station
@@ -213,14 +215,27 @@ func buy_fuel(body: GasStation):
 
 
 func stock_fish(stock: Stock):
-	var has_sold_something = false
+	var sold_sum = 0
+	var color_bonuses := {
+		
+	}
 	for fish_meta in boat_hold.duplicate():
 		if stock.is_universal or stock.stock_fish_type == fish_meta.fish_type:
 			points += fish_meta.value
+			sold_sum += fish_meta.value
 			boat_hold.erase(fish_meta)
-			has_sold_something = true
-	if has_sold_something:
+			if color_bonuses.has(fish_meta.fish_type):
+				color_bonuses[fish_meta.fish_type] += 1
+			else:
+				color_bonuses[fish_meta.fish_type] = 0
+	var bonus = 0
+	for color_bonus_amount in color_bonuses.values():
+		bonus += ceil(pow(color_bonus_amount, COLOR_BONUS_EXP))
+	if sold_sum > 0:
 		emit_signal("hold_changed", boat_hold)
 		emit_signal("points_changed", points)
+		var text = "PROFIT %s$ + COLOR BONUS %s$" % [sold_sum, bonus] if bonus > 0 else "PROFIT %s$" % [sold_sum]
+		text_popup.pop_up(text)
+		
 	
 
