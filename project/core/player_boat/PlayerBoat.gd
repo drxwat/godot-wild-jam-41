@@ -23,11 +23,14 @@ var pickup_candidate: Fish = null
 var boat_hold := []
 var danger_pool_timeout = 0.5
 var current_move_direction = Vector3.ZERO
-var max_fuel_time := 60.0
-var fuel = max_fuel_time
+var max_fuel_time := 120.0
+var fuel = max_fuel_time / 2
 var emit_fuel_change = FUEL_EMIT_PERIOD
 var danger_area = Enums.AreaType.SAFE
+var gas_station
 
+var fuel_buying_speed = 50.0
+var fuel_bought = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,9 +43,18 @@ func _ready():
 
 
 func _physics_process(delta: float):
-	if Input.is_action_just_pressed("pick_up") and pickup_candidate and can_pick_up_fish(pickup_candidate):
-		pick_up_fish(pickup_candidate)
 	update_fish_freshness(delta)
+	if Input.is_action_pressed("pick_up") and gas_station and fuel < max_fuel_time and points > 0:
+		var fuel_to_buy = ceil(delta * fuel_buying_speed)
+		var fuel_price = fuel_to_buy * gas_station.fuel_price
+		fuel += fuel_to_buy
+		points -= fuel_price
+		print(fuel_to_buy, fuel_price)
+		emit_signal("fuel_level_changed", [fuel, max_fuel_time])
+		emit_signal("points_changed", points)
+		return
+	elif Input.is_action_just_pressed("pick_up") and pickup_candidate and can_pick_up_fish(pickup_candidate):
+		pick_up_fish(pickup_candidate)
 	handle_move(delta)
 
 
@@ -128,7 +140,24 @@ func rotate_unit(move_direction):
 	tween.start()
 
 
-func _on_StockArea_body_entered(stock: Stock):
+func _on_StockArea_body_entered(body: StaticBody):
+	if body is Stock:
+		stock_fish(body)
+	if body is GasStation:
+		gas_station = body
+
+
+
+func _on_StockGasArea_body_exited(body: StaticBody):
+	if body is GasStation:
+		gas_station = null
+
+
+func buy_fuel(body: GasStation):
+	pass
+
+
+func stock_fish(stock: Stock):
 	var has_sold_something = false
 	for fish_meta in boat_hold.duplicate():
 		if stock.is_universal or stock.stock_fish_type == fish_meta.fish_type:
@@ -138,4 +167,5 @@ func _on_StockArea_body_entered(stock: Stock):
 	if has_sold_something:
 		emit_signal("hold_changed", boat_hold)
 		emit_signal("points_changed", points)
+	
 

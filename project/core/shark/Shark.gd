@@ -1,7 +1,7 @@
 extends KinematicBody
 
 const ROTATION_TRANSITION = 0.1
-const PATH_TO_TARGET_PERIOD = 0.2
+const PATH_TO_TARGET_PERIOD = 0.8
 
 export(NodePath) var navigation_node_path
 
@@ -38,6 +38,8 @@ func _process(delta: float):
 	if target and is_target_reachable:
 		chase_target()
 		return
+	elif target and not path.empty(): # not_reachable
+		find_return_path(path)
 	
 	if not path.empty():
 		_move_along_path()
@@ -71,6 +73,12 @@ func _rotate_unit(move_direction: Vector3):
 		get_rotation(), new_rotation, ROTATION_TRANSITION, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.start()
 
+
+func find_return_path(old_path: PoolVector3Array):
+	var destination_point = old_path[old_path.size() - 1]
+	var new_path = navigation.get_simple_path(global_transform.origin, destination_point)
+	if new_path.size() > 0:
+		path = new_path
 
 func _on_AttackArea_body_entered(player):
 	target = player
