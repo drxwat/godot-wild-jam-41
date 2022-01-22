@@ -271,14 +271,17 @@ radius = 30.0
 [node name="FishSpawn2" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 43.9699, 0, 110.738 )
 radius = 25.0
+spawn_gold = true
 
 [node name="FishSpawn7" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 37.2118, 0, 51.1088 )
 radius = 30.0
+spawn_gold = true
 
 [node name="FishSpawn8" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 88.3894, 0, 107.86 )
 radius = 20.0
+spawn_gold = true
 
 [node name="FishSpawn6" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 140.331, 0, 68.5744 )
@@ -287,6 +290,7 @@ radius = 45.0
 [node name="FishSpawn3" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 215.475, 0, 101.297 )
 radius = 30.0
+spawn_gold = true
 
 [node name="FishSpawn4" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 73.3146, 0, 202.666 )
@@ -295,14 +299,17 @@ radius = 20.0
 [node name="FishSpawn9" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 33.0748, 0, 228.454 )
 radius = 25.0
+spawn_gold = true
 
 [node name="FishSpawn10" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.344, 0, 151.108 )
 radius = 15.0
+spawn_gold = true
 
 [node name="FishSpawn11" parent="FishSpawners" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.1245, 0, 165.025 )
 radius = 15.0
+spawn_gold = true
 
 [node name="HouseYellow" parent="." instance=ExtResource( 11 )]
 transform = Transform( 0.783867, 0, 0.620929, 0, 1, 0, -0.620929, 0, 0.783867, 200.57, 1.22962, 40.6726 )
@@ -367,6 +374,33 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 121.325, 0, 30.3483 )
 [node name="Position3D8" type="Position3D" parent="Shark/PathPoints"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 34.7759, 0, 45.2548 )
 
+[node name="Shark3" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 36.8859, 0, 222.66 )
+navigation_node_path = NodePath("../Navigation")
+
+[node name="PathPoints" type="Node" parent="Shark3"]
+
+[node name="Position3D" type="Position3D" parent="Shark3/PathPoints"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 37.3027, 0, 224.65 )
+
+[node name="Position3D2" type="Position3D" parent="Shark3/PathPoints"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 123.995, 0, 129.205 )
+
+[node name="Position3D3" type="Position3D" parent="Shark3/PathPoints"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 197.559, 0, 228.609 )
+
+[node name="Position3D4" type="Position3D" parent="Shark3/PathPoints"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 44.1798, 0, 111.283 )
+
+[node name="Position3D5" type="Position3D" parent="Shark3/PathPoints"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 218.19, 0, 95.445 )
+
+[node name="Position3D6" type="Position3D" parent="Shark3/PathPoints"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 153.796, 0, 238.196 )
+
+[node name="Position3D7" type="Position3D" parent="Shark3/PathPoints"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 123.578, 0, 85.2336 )
+
 [node name="Jetty" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 74.2869, -0.642339, 86.5198 )
 
@@ -397,23 +431,11 @@ transform = Transform( -0.84085, 0, 0.541268, 0, 1, 0, -0.541268, 0, -0.84085, 1
 [node name="GasStation" parent="Jetty5" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -0.61702, 1.51705, 3.51746 )
 
-[node name="Fish" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 130.717, 0, 163.263 )
-
-[node name="Fish2" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 147.026, 0, 186.813 )
-fish_type = 1
-
-[node name="Fish3" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 174.63, 0, 163.939 )
-fish_type = 1
-
-[node name="Fish4" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 175.614, 0, 194.598 )
-fish_type = 1
-
 [node name="GasStation2" parent="." instance=ExtResource( 14 )]
 transform = Transform( 0.492029, 0, -0.870579, 0, 1, 0, 0.870579, 0, 0.492029, 112.2, 0.559848, 222.815 )
+
+[node name="Fish" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 136.958, 0, 194.917 )
 
 [connection signal="area_changed" from="PlayerBoat" to="UI/HUD" method="change_area"]
 [connection signal="fuel_level_changed" from="PlayerBoat" to="UI/HUD" method="update_fuel_level"]
@@ -421,3 +443,5 @@ transform = Transform( 0.492029, 0, -0.870579, 0, 1, 0, 0.870579, 0, 0.492029, 1
 [connection signal="hold_size_changed" from="PlayerBoat" to="UI/HUD" method="resize_hold"]
 [connection signal="points_changed" from="PlayerBoat" to="UI/HUD" method="update_money"]
 [connection signal="wasted" from="PlayerBoat" to="." method="on_wasted"]
+
+[editable path="Fish"]

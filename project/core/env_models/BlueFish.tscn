@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://core/env_models/BlueFish.mesh" type="ArrayMesh" id=1]
+[ext_resource path="res://assets/fish/blue/fish_blue.glb" type="PackedScene" id=2]
+
+[node name="fish_blue" instance=ExtResource( 2 )]
+
+[node name="FishV1" parent="." index="0"]
+mesh = ExtResource( 1 )

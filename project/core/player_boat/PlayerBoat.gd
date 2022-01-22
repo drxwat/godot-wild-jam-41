@@ -30,12 +30,11 @@ onready var text_popup := $TextPopup
 
 var is_disabled := false
 var points = 500
-var pickup_candidate: Fish = null
 var boat_hold := []
 var danger_pool_timeout = 0.5
 var current_move_direction = Vector3.ZERO
 var max_fuel_time := 120.0
-var fuel = max_fuel_time
+var fuel = max_fuel_time / 3
 var emit_fuel_change = FUEL_EMIT_PERIOD
 var danger_area = Enums.AreaType.SAFE
 var gas_station
@@ -59,16 +58,8 @@ func _physics_process(delta: float):
 	if is_disabled:
 		return
 	update_fish_freshness(delta)
-	if Input.is_action_pressed("pick_up") and gas_station and fuel < max_fuel_time and points > 0:
-		var fuel_to_buy = ceil(delta * fuel_buying_speed)
-		var fuel_price = fuel_to_buy * gas_station.fuel_price
-		fuel += fuel_to_buy
-		points -= fuel_price
-		emit_signal("fuel_level_changed", [fuel, max_fuel_time])
-		emit_signal("points_changed", points)
-		return
-	elif Input.is_action_just_pressed("pick_up") and pickup_candidate and can_pick_up_fish(pickup_candidate):
-		pick_up_fish(pickup_candidate)
+	if gas_station and fuel < max_fuel_time and points > 0:
+		buy_fuel(delta)
 	
 	if Input.is_action_pressed("ui_up") or \
 	Input.is_action_pressed("ui_down") or \
@@ -81,6 +72,13 @@ func _physics_process(delta: float):
 	sound_process()
 	handle_move(delta)
 
+func buy_fuel(delta: float):
+	var fuel_to_buy = ceil(delta * fuel_buying_speed)
+	var fuel_price = fuel_to_buy * gas_station.fuel_price
+	fuel += fuel_to_buy
+	points -= fuel_price
+	emit_signal("fuel_level_changed", [fuel, max_fuel_time])
+	emit_signal("points_changed", points)
 
 func die_from_shark():
 	is_disabled = true
@@ -140,18 +138,8 @@ func pick_up_fish(fish: Fish):
 
 
 func _on_FishPickupArea_body_entered(fish: Fish):
-	if pickup_candidate != fish:
-		if pickup_candidate:
-			pickup_candidate.highlight_off()
-		pickup_candidate = fish
 	if can_pick_up_fish(fish):
-		fish.highlight_on()
-
-
-func _on_FishPickupArea_body_exited(fish: Fish):
-	if pickup_candidate == fish:
-		pickup_candidate = null
-	fish.highlight_off()
+		pick_up_fish(fish)
 
 
 func handle_move(delta: float):
@@ -209,9 +197,6 @@ func _on_StockGasArea_body_exited(body: StaticBody):
 	if body is GasStation:
 		gas_station = null
 
-
-func buy_fuel(body: GasStation):
-	pass
 
 
 func stock_fish(stock: Stock):

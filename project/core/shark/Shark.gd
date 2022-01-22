@@ -49,7 +49,6 @@ func _process(delta: float):
 		find_random_path()
 
 func chase_target():
-	print('chasing')
 	var move_vector = global_transform.origin.direction_to(target.global_transform.origin)
 	_rotate_unit(move_vector)
 	move_and_slide(move_vector.normalized() * chase_speed, Vector3.UP)

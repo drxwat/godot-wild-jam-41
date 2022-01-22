@@ -55,7 +55,6 @@ bus = "Engine"
 texture = SubResource( 7 )
 
 [connection signal="body_entered" from="FishPickupArea" to="." method="_on_FishPickupArea_body_entered"]
-[connection signal="body_exited" from="FishPickupArea" to="." method="_on_FishPickupArea_body_exited"]
 [connection signal="body_entered" from="StockGasArea" to="." method="_on_StockArea_body_entered"]
 [connection signal="body_exited" from="StockGasArea" to="." method="_on_StockGasArea_body_exited"]
 

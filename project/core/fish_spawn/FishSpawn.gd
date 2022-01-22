@@ -1,9 +1,11 @@
 extends Spatial
 tool
 
+const GOLD_PROB = 0.1
 
 export var spawn_time_deviation := 2.0
 export var radius := 10.0
+export var spawn_gold := false
 
 var rng = RandomNumberGenerator.new()
 var fish_scene = preload("res://core/fish/Fish.tscn")
@@ -33,7 +35,9 @@ func spawn_fish():
 	yield(get_tree().create_timer(timeout), "timeout")
 	if fish_container.get_child_count() >= max_fish:
 		return
-	var fish_type = rng.randi_range(0, Enums.FishType.size() - 1)
+	var fish_type = rng.randi_range(0, [Enums.FishType.BLUE, Enums.FishType.RED].size() - 1)
+	if spawn_gold and rng.randf() < GOLD_PROB:
+		fish_type = Enums.FishType.GOLD
 	var spawn_radius = rng.randf_range(0.0, radius)
 	var fish_origin = Vector3(rng.randf_range(-1.0, 1.0), 0.0, rng.randf_range(-1.0, 1.0)).normalized() * spawn_radius
 	var fish = fish_scene.instance()
