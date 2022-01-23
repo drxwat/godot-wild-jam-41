@@ -91,6 +91,7 @@ func buy_fuel(delta: float):
 
 func die_from_shark():
 	is_disabled = true
+	engine_noise.stop()
 	if points >= SHARK_PENALTY:
 		emit_signal("wasted", "ROBED BY SHARK", points, SHARK_PENALTY)
 
@@ -177,6 +178,7 @@ func burn_fuel(delta: float):
 	if emit_fuel_change <= 0:
 		emit_signal("fuel_level_changed", [fuel, max_fuel_time])
 	if fuel <= 0 and points > FUEL_PENALTY:
+		engine_noise.stop()
 		emit_signal("wasted", "OUT OF FUEL", points, FUEL_PENALTY)
 		is_disabled = true
 	elif fuel <= 0:

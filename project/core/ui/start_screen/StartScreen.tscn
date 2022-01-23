@@ -251,4 +251,5 @@ margin_right = 424.0
 margin_bottom = 182.0
 text = "EXIT GAME"
 
-[connection signal="pressed" from="Viewport/Spatial/Sprite3D/Viewport/VBoxContainer/StartButton" to="." method="on_start_game"]
+[connection signal="pressed" from="Control/TextureRect/MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/StartButton" to="." method="on_start_game"]
+[connection signal="pressed" from="Control/TextureRect/MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/ExitButton" to="." method="on_exit_game"]

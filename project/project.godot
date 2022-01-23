@@ -60,6 +60,10 @@ config/name="godot-wild-jam-41"
 run/main_scene="res://levels/base_level/BaseLevel.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://core/globals/Global.gd"
+
 [display]
 
 window/size/height=653
