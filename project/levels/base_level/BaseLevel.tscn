@@ -219,7 +219,7 @@ viewport_path = NodePath("GasStation2/TextPopup/Viewport")
 [node name="BaseLevel" type="Spatial"]
 script = ExtResource( 18 )
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="Ocean" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 16 )
 volume_db = 9.613
 autoplay = true
