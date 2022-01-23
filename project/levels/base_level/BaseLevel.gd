@@ -13,6 +13,7 @@ func _ready():
 	player.connect("fuel_buy_in_progress", self, "on_fuel_buy_start")
 	player.connect("fuel_buy_end", self, "on_fuel_buy_stop")
 	player.connect("fish_sold", self, "on_fish_sell")
+	player.connect("fish_picked_up", self, "on_fish_pick_up")
 
 
 func on_wasted(reason: String, _money: int, _penalty: int):
@@ -43,3 +44,7 @@ func on_fuel_buy_stop():
 
 func on_fish_sell():
 	print("FISH SELL")
+
+
+func on_fish_pick_up():
+	pass

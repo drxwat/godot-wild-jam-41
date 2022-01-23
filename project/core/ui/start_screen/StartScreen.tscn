@@ -1,0 +1,109 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://shaders/blue_water_shader.gdshader" type="Shader" id=1]
+[ext_resource path="res://core/world_envs/BlueOcean.tres" type="Environment" id=2]
+[ext_resource path="res://core/ui/start_screen/SharkPath.gd" type="Script" id=3]
+[ext_resource path="res://core/env_models/Shark.tscn" type="PackedScene" id=4]
+
+[sub_resource type="PlaneMesh" id=1]
+size = Vector2( 256, 256 )
+subdivide_width = 1
+subdivide_depth = 1
+
+[sub_resource type="OpenSimplexNoise" id=4]
+octaves = 2
+period = 80.0
+lacunarity = 4.0
+
+[sub_resource type="NoiseTexture" id=5]
+seamless = true
+noise = SubResource( 4 )
+
+[sub_resource type="OpenSimplexNoise" id=6]
+octaves = 2
+period = 80.0
+lacunarity = 4.0
+
+[sub_resource type="NoiseTexture" id=7]
+seamless = true
+noise = SubResource( 6 )
+
+[sub_resource type="ShaderMaterial" id=3]
+render_priority = -1
+shader = ExtResource( 1 )
+shader_param/speed = 0.005
+shader_param/color = Color( 0.0352941, 0.658824, 0.929412, 0.635294 )
+shader_param/deep_water = Color( 0.223529, 0.380392, 0.490196, 0.85098 )
+shader_param/beer_law_factor = 0.016
+shader_param/_distance = -0.2
+shader_param/edge_color = Color( 0.858824, 0.960784, 0.956863, 1 )
+shader_param/edge_scale = 1.252
+shader_param/near = 2.588
+shader_param/far = 300.0
+shader_param/wave_strength = Vector2( 0.2, 0.12 )
+shader_param/wave_frequ = Vector2( 12, 12 )
+shader_param/time_factor = Vector2( 1, 2 )
+shader_param/noise1 = SubResource( 5 )
+shader_param/noise2 = SubResource( 7 )
+
+[sub_resource type="Curve3D" id=9]
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 49.2682, 8.16584e-06, 2.46284, 0, 0, 0, 0, 0, 0, 106.613, 8.16584e-06, -7.2877, 0, 0, 0, 0, 0, 0, 119.839, 8.16584e-06, -23.9892, 0, 0, 0, 0, 0, 0, 98.4072, 8.16584e-06, -40.0148, 0, 0, 0, 0, 0, 0, 47.4339, 8.16584e-06, -29.1058, 0, 0, 0, 0, 0, 0, 49.2682, 8.16584e-06, 2.46284 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="ViewportTexture" id=8]
+viewport_path = NodePath("Viewport")
+
+[node name="StartScreen" type="CanvasLayer"]
+follow_viewport_enable = true
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 1024, 600 )
+render_target_v_flip = true
+
+[node name="Spatial" type="Spatial" parent="Viewport"]
+
+[node name="Camera" type="Camera" parent="Viewport/Spatial"]
+transform = Transform( 1, 0, 0, 0, 0.680721, 0.732543, 0, -0.732543, 0.680721, 127.012, 23.0457, 251.846 )
+current = true
+
+[node name="MeshInstance" type="MeshInstance" parent="Viewport/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 128.392, -0.0717602, 128.264 )
+mesh = SubResource( 1 )
+skeleton = NodePath("../../..")
+material/0 = SubResource( 3 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Viewport/Spatial"]
+environment = ExtResource( 2 )
+
+[node name="SharkPath" type="Path" parent="Viewport/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52.7455, -0.376, 239.228 )
+curve = SubResource( 9 )
+script = ExtResource( 3 )
+
+[node name="PathFollow" type="PathFollow" parent="Viewport/Spatial/SharkPath"]
+transform = Transform( -0.00725712, -4.53968e-12, 0.99997, 0, 1, 4.53979e-12, -0.999974, 3.29459e-14, -0.0072571, 46.6643, 8.16584e-06, 2.07037 )
+rotation_mode = 4
+
+[node name="Shark" parent="Viewport/Spatial/SharkPath/PathFollow" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource( 8 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
