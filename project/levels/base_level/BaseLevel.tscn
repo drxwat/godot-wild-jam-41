@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://core/player_boat/PlayerBoat.tscn" type="PackedScene" id=1]
 [ext_resource path="res://core/ui/hud/HUD.tscn" type="PackedScene" id=2]
@@ -229,7 +229,6 @@ bus = "Ocean"
 
 [node name="Alarm" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 22 )
-bus = "Alarm"
 
 [node name="Navigation" type="Navigation" parent="."]
 

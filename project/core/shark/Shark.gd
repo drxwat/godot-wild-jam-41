@@ -35,8 +35,10 @@ func _process(delta: float):
 			var path_to_target = navigation.get_simple_path(global_transform.origin, target.global_transform.origin)
 			if path_to_target.size() > 0:
 				is_target_reachable = true
+				emit_signal("chasing")
 			else:
 				is_target_reachable = false
+				emit_signal("lose_target")
 	if target and is_target_reachable:
 		chase_target()
 		return

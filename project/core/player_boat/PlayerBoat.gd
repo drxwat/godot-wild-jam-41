@@ -11,6 +11,9 @@ signal fuel_level_changed
 signal points_changed
 signal wasted
 signal game_over
+signal fuel_buy_in_progress
+signal fuel_buy_end
+signal fish_sold
 
 const ROTATION_TRANSITION = 0.2
 const FUEL_EMIT_PERIOD = 1.0
@@ -60,6 +63,8 @@ func _physics_process(delta: float):
 	update_fish_freshness(delta)
 	if gas_station and fuel < max_fuel_time and points > 0:
 		buy_fuel(delta)
+	elif gas_station and fuel >= max_fuel_time:
+		emit_signal("fuel_buy_end")
 	
 	if Input.is_action_pressed("ui_up") or \
 	Input.is_action_pressed("ui_down") or \
@@ -79,6 +84,7 @@ func buy_fuel(delta: float):
 	points -= fuel_price
 	emit_signal("fuel_level_changed", [fuel, max_fuel_time])
 	emit_signal("points_changed", points)
+	emit_signal("fuel_buy_in_progress")
 
 func die_from_shark():
 	is_disabled = true
@@ -222,6 +228,7 @@ func stock_fish(stock: Stock):
 		emit_signal("points_changed", points)
 		var text = "PROFIT %s$ + COLOR BONUS %s$" % [sold_sum, bonus] if bonus > 0 else "PROFIT %s$" % [sold_sum]
 		text_popup.pop_up(text)
+		emit_signal("fish_sold")
 		
 	
 

@@ -2,13 +2,17 @@ extends Spatial
 
 onready var player := $PlayerBoat
 onready var wasted_overlay := $UI/WastedOverlay
+onready var alarm := $Alarm
 
 var initial_position = Vector3(118.777, 0.413, 212.549)
 
 func _ready():
 	for shark in get_tree().get_nodes_in_group("sharks"):
 		shark.connect("chasing", self, "on_shark_chasing")
-		shark.connect("chasing", self, "on_shark_lose_target")
+		shark.connect("lose_target", self, "on_shark_lose_target")
+	player.connect("fuel_buy_in_progress", self, "on_fuel_buy_start")
+	player.connect("fuel_buy_end", self, "on_fuel_buy_stop")
+	player.connect("fish_sold", self, "on_fish_sell")
 
 
 func on_wasted(reason: String, _money: int, _penalty: int):
@@ -20,8 +24,22 @@ func on_wasted(reason: String, _money: int, _penalty: int):
 
 
 func on_shark_chasing():
-	$Alarm.play()
+	if not alarm.playing:
+		alarm.play()
 	
 	
 func on_shark_lose_target():
-	$Alarm.stop()
+	if alarm.playing:
+		alarm.stop()
+
+
+func on_fuel_buy_start():
+	print("BUY FUEL")
+	
+
+func on_fuel_buy_stop():
+	print("STOP BUY FUEL")
+	
+
+func on_fish_sell():
+	print("FISH SELL")

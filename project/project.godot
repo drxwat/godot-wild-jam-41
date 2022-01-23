@@ -60,10 +60,6 @@ config/name="godot-wild-jam-41"
 run/main_scene="res://levels/base_level/BaseLevel.tscn"
 config/icon="res://icon.png"
 
-[display]
-
-window/size/fullscreen=true
-
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/zylann.hterrain/plugin.cfg" )
