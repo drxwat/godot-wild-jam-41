@@ -42,4 +42,5 @@ func on_fuel_buy_stop():
 	
 
 func on_fish_sell():
-	print("FISH SELL")
+	if not alarm.playing:
+		$SaleOfFish.play()

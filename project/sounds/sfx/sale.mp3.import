@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/sale.mp3-c0fc4ff317540dca13fd88a719a316de.mp3str"
+
+[deps]
+
+source_file="res://sounds/sfx/sale.mp3"
+dest_files=[ "res://.import/sale.mp3-c0fc4ff317540dca13fd88a719a316de.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
