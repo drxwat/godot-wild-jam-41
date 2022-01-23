@@ -14,6 +14,7 @@ signal game_over
 signal fuel_buy_in_progress
 signal fuel_buy_end
 signal fish_sold
+signal fish_picked_up
 
 const ROTATION_TRANSITION = 0.2
 const FUEL_EMIT_PERIOD = 1.0
@@ -41,6 +42,7 @@ var fuel = max_fuel_time / 3
 var emit_fuel_change = FUEL_EMIT_PERIOD
 var danger_area = Enums.AreaType.SAFE
 var gas_station
+var base_enginge_pitch 
 
 var is_moving: bool = false
 
@@ -49,6 +51,7 @@ var fuel_bought = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	base_enginge_pitch = $EngineNoise.pitch_scale
 	emit_signal("hold_size_changed", boat_hold_capacity)
 	emit_signal("hold_changed", boat_hold)
 	emit_signal("fuel_level_changed", [fuel, max_fuel_time])
@@ -141,6 +144,7 @@ func pick_up_fish(fish: Fish):
 	boat_hold.append(fish.meta)
 	emit_signal("hold_changed", boat_hold)
 	fish.remove_self()
+	emit_signal("fish_picked_up")
 
 
 func _on_FishPickupArea_body_entered(fish: Fish):
@@ -159,8 +163,8 @@ func handle_move(delta: float):
 		current_move_direction = move_direction
 
 	var fuel_modifier = LOW_FUEL_SPEED_MOD if fuel / max_fuel_time <= LOW_FUEL_BOUNDARY else 1.0
-	if engine_noise.pitch_scale != fuel_modifier:
-		engine_noise.pitch_scale = fuel_modifier
+	if engine_noise.pitch_scale != base_enginge_pitch * fuel_modifier:
+		engine_noise.pitch_scale = base_enginge_pitch * fuel_modifier
 	if move_direction.length() > 0:
 		burn_fuel(delta * fuel_modifier)
 	if fuel > 0:
