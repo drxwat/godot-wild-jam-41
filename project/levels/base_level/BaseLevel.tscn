@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://core/player_boat/PlayerBoat.tscn" type="PackedScene" id=1]
 [ext_resource path="res://core/ui/hud/HUD.tscn" type="PackedScene" id=2]
@@ -215,6 +215,8 @@ viewport_path = NodePath("HouseBlue/TextPopup/Viewport")
 [sub_resource type="ViewportTexture" id=19]
 viewport_path = NodePath("GasStation2/TextPopup/Viewport")
 
+[sub_resource type="PlaneShape" id=23]
+
 [node name="BaseLevel" type="Spatial"]
 script = ExtResource( 18 )
 
@@ -259,7 +261,7 @@ __meta__ = {
 [node name="WastedOverlay" parent="UI" instance=ExtResource( 17 )]
 
 [node name="PlayerBoat" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 142.806, 0.412685, 226.769 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 147.46, 0.412685, 222.623 )
 navigation_node_path = NodePath("../Navigation")
 
 [node name="Camera" type="Camera" parent="PlayerBoat"]
@@ -532,6 +534,36 @@ fish_type = 2
 
 [node name="Particles" parent="Fish3" index="0"]
 draw_pass_1 = ExtResource( 21 )
+
+[node name="Borders" type="Spatial" parent="."]
+
+[node name="Top" type="StaticBody" parent="Borders"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 10.567, 0, 14.1181 )
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="Borders/Top"]
+shape = SubResource( 23 )
+
+[node name="Left" type="StaticBody" parent="Borders"]
+transform = Transform( -4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 7.93574, 0, 16.6147 )
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="Borders/Left"]
+shape = SubResource( 23 )
+
+[node name="Bottom" type="StaticBody" parent="Borders"]
+transform = Transform( -1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 255.094, 0, 238.141 )
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="Borders/Bottom"]
+shape = SubResource( 23 )
+
+[node name="Right" type="StaticBody" parent="Borders"]
+transform = Transform( -4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 1.91069e-15, 247.042, 0, 250.376 )
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="Borders/Right"]
+shape = SubResource( 23 )
 
 [connection signal="area_changed" from="PlayerBoat" to="UI/HUD" method="change_area"]
 [connection signal="fuel_level_changed" from="PlayerBoat" to="UI/HUD" method="update_fuel_level"]
