@@ -1,9 +1,12 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://shaders/blue_water_shader.gdshader" type="Shader" id=1]
 [ext_resource path="res://core/world_envs/BlueOcean.tres" type="Environment" id=2]
 [ext_resource path="res://core/ui/start_screen/SharkPath.gd" type="Script" id=3]
 [ext_resource path="res://core/env_models/Shark.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/MochiyPopPOne-Regular.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://core/ui/start_screen/StartScreen.gd" type="Script" id=6]
+[ext_resource path="res://core/fish/Fish.tscn" type="PackedScene" id=7]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 256, 256 )
@@ -48,15 +51,46 @@ shader_param/noise2 = SubResource( 7 )
 
 [sub_resource type="Curve3D" id=9]
 _data = {
-"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 49.2682, 8.16584e-06, 2.46284, 0, 0, 0, 0, 0, 0, 106.613, 8.16584e-06, -7.2877, 0, 0, 0, 0, 0, 0, 119.839, 8.16584e-06, -23.9892, 0, 0, 0, 0, 0, 0, 98.4072, 8.16584e-06, -40.0148, 0, 0, 0, 0, 0, 0, 47.4339, 8.16584e-06, -29.1058, 0, 0, 0, 0, 0, 0, 49.2682, 8.16584e-06, 2.46284 ),
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 49.2682, 8.16584e-06, 2.46284, 0, 0, 0, 0, 0, 0, 104.871, 8.16584e-06, 3.00566, 0, 0, 0, 0, 0, 0, 107.352, 8.16584e-06, -21.8829, 0, 0, 0, 0, 0, 0, 98.4072, 8.16584e-06, -40.0148, 0, 0, 0, 0, 0, 0, 47.6513, 8.16584e-06, -34.2872, 0, 0, 0, 0, 0, 0, 49.2682, 8.16584e-06, 2.46284 ),
 "tilts": PoolRealArray( 0, 0, 0, 0, 0, 0 )
 }
+
+[sub_resource type="Curve3D" id=16]
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 0.257858, 0, 3.60992, 0, 0, 0, 0, 0, 0, -75.19, 0, 17.0276, 0, 0, 0, 0, 0, 0, -61.0251, 0, 45.0373, 0, 0, 0, 0, 0, 0, -3.82623, 0, 46.926, 0, 0, 0, 0, 0, 0, 0.257858, 0, 3.60992 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="ViewportTexture" id=10]
+viewport_path = NodePath("Viewport/Spatial/Sprite3D/Viewport")
+
+[sub_resource type="DynamicFont" id=13]
+size = 250
+font_data = ExtResource( 5 )
+
+[sub_resource type="Theme" id=14]
+default_font = SubResource( 13 )
 
 [sub_resource type="ViewportTexture" id=8]
 viewport_path = NodePath("Viewport")
 
+[sub_resource type="DynamicFont" id=17]
+size = 100
+font_data = ExtResource( 5 )
+
+[sub_resource type="Theme" id=18]
+default_font = SubResource( 17 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 48
+font_data = ExtResource( 5 )
+
+[sub_resource type="Theme" id=12]
+default_font = SubResource( 11 )
+
 [node name="StartScreen" type="CanvasLayer"]
 follow_viewport_enable = true
+script = ExtResource( 6 )
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 1024, 600 )
@@ -86,11 +120,61 @@ curve = SubResource( 9 )
 script = ExtResource( 3 )
 
 [node name="PathFollow" type="PathFollow" parent="Viewport/Spatial/SharkPath"]
-transform = Transform( -0.00725712, -4.53968e-12, 0.99997, 0, 1, 4.53979e-12, -0.999974, 3.29459e-14, -0.0072571, 46.6643, 8.16584e-06, 2.07037 )
+transform = Transform( -0.167624, 0, 0.985848, 0, 1, 0, -0.985851, 0, -0.167623, 49.2682, 8.16584e-06, 2.46284 )
 rotation_mode = 4
 
 [node name="Shark" parent="Viewport/Spatial/SharkPath/PathFollow" instance=ExtResource( 4 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
+
+[node name="Path" type="Path" parent="Viewport/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 171.265, 0, 196.476 )
+curve = SubResource( 16 )
+script = ExtResource( 3 )
+
+[node name="PathFollow" type="PathFollow" parent="Viewport/Spatial/Path"]
+transform = Transform( 0.182254, 0, -0.983251, 0, 1, 0, 0.983252, 0, 0.182254, 0.257858, 0, 3.60992 )
+rotation_mode = 4
+
+[node name="Shark" parent="Viewport/Spatial/Path/PathFollow" instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
+
+[node name="Sprite3D" type="Sprite3D" parent="Viewport/Spatial"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 126.058, 2.48981, 231.679 )
+visible = false
+texture = SubResource( 10 )
+
+[node name="Viewport" type="Viewport" parent="Viewport/Spatial/Sprite3D"]
+size = Vector2( 2000, 1000 )
+transparent_bg = true
+render_target_v_flip = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Viewport/Spatial/Sprite3D/Viewport"]
+margin_right = 40.0
+margin_bottom = 40.0
+theme = SubResource( 14 )
+custom_constants/separation = 250
+alignment = 1
+
+[node name="StartButton" type="Button" parent="Viewport/Spatial/Sprite3D/Viewport/VBoxContainer"]
+margin_right = 2044.0
+margin_bottom = 368.0
+text = "START GAME"
+flat = true
+
+[node name="ExitButton" type="Button" parent="Viewport/Spatial/Sprite3D/Viewport/VBoxContainer"]
+margin_top = 618.0
+margin_right = 2044.0
+margin_bottom = 986.0
+text = "EXIT GAME"
+flat = true
+
+[node name="Fish" parent="Viewport/Spatial" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 103.601, -0.858909, 185.664 )
+fish_type = 2
+
+[node name="Fish2" parent="Viewport/Spatial" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 163.439, -0.859, 168.843 )
+fish_type = 1
 
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
@@ -107,3 +191,64 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/TextureRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -512.0
+margin_top = -326.5
+margin_right = 512.0
+margin_bottom = 326.5
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/TextureRect/MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 653.0
+custom_constants/separation = 50
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/TextureRect/MarginContainer/VBoxContainer2"]
+margin_top = 138.0
+margin_right = 1024.0
+margin_bottom = 283.0
+theme = SubResource( 18 )
+text = "FISH 4 LIFE"
+align = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/TextureRect/MarginContainer/VBoxContainer2"]
+margin_top = 333.0
+margin_right = 1024.0
+margin_bottom = 515.0
+custom_constants/margin_right = 300
+custom_constants/margin_left = 300
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/TextureRect/MarginContainer/VBoxContainer2/MarginContainer"]
+margin_left = 300.0
+margin_right = 724.0
+margin_bottom = 182.0
+theme = SubResource( 12 )
+custom_constants/separation = 30
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartButton" type="Button" parent="Control/TextureRect/MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
+margin_right = 424.0
+margin_bottom = 76.0
+text = "START GAME"
+
+[node name="ExitButton" type="Button" parent="Control/TextureRect/MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
+margin_top = 106.0
+margin_right = 424.0
+margin_bottom = 182.0
+text = "EXIT GAME"
+
+[connection signal="pressed" from="Viewport/Spatial/Sprite3D/Viewport/VBoxContainer/StartButton" to="." method="on_start_game"]
