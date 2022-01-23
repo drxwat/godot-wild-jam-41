@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/gamejam-ost-main-theme-accordion.mp3-b84e1f74ca71b9de6463bad384f3940a.mp3str"
+
+[deps]
+
+source_file="res://sounds/soundtracks/gamejam-ost-main-theme-accordion.mp3"
+dest_files=[ "res://.import/gamejam-ost-main-theme-accordion.mp3-b84e1f74ca71b9de6463bad384f3940a.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/gamejam-ost-thriller-cover.mp3-862c76f5436775931b1cef8c7389f6a2.mp3str"
+
+[deps]
+
+source_file="res://sounds/soundtracks/gamejam-ost-thriller-cover.mp3"
+dest_files=[ "res://.import/gamejam-ost-thriller-cover.mp3-862c76f5436775931b1cef8c7389f6a2.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

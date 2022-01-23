@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/gamejam-ost-intro.mp3-776c690a76fbd9683b11aebae3777777.mp3str"
+
+[deps]
+
+source_file="res://sounds/soundtracks/gamejam-ost-intro.mp3"
+dest_files=[ "res://.import/gamejam-ost-intro.mp3-776c690a76fbd9683b11aebae3777777.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
