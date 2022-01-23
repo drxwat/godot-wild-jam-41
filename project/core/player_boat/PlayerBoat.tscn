@@ -48,7 +48,6 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0
 
 [node name="EngineNoise" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
-volume_db = -10.0
 bus = "Engine"
 
 [node name="TextPopup" parent="." instance=ExtResource( 4 )]
