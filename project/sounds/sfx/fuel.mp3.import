@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/fuel.mp3-3b740e652a3f93d7d0c8276add896102.mp3str"
+
+[deps]
+
+source_file="res://sounds/sfx/fuel.mp3"
+dest_files=[ "res://.import/fuel.mp3-3b740e652a3f93d7d0c8276add896102.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

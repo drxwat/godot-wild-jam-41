@@ -35,16 +35,18 @@ func on_shark_lose_target():
 
 
 func on_fuel_buy_start():
-	print("BUY FUEL")
+	if not $Fuel.playing:
+		$Fuel.play()
 	
 
 func on_fuel_buy_stop():
-	print("STOP BUY FUEL")
+	if $Fuel.playing:
+		$Fuel.stop()
 	
 
 func on_fish_sell():
-	print("FISH SELL")
-
+	if not $SaleOfFish.playing:
+		$SaleOfFish.play()
 
 func on_fish_pick_up():
 	pass
