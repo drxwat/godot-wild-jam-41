@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/gamejam-ost-the-feeling.mp3-cc9727b6824eed147234a9adc28f6318.mp3str"
+
+[deps]
+
+source_file="res://sounds/soundtracks/gamejam-ost-the-feeling.mp3"
+dest_files=[ "res://.import/gamejam-ost-the-feeling.mp3-cc9727b6824eed147234a9adc28f6318.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/gamejam-ost-circus-waltz.mp3-e76d34ce3ca39bf9a382c50fd4848390.mp3str"
+
+[deps]
+
+source_file="res://sounds/soundtracks/gamejam-ost-circus-waltz.mp3"
+dest_files=[ "res://.import/gamejam-ost-circus-waltz.mp3-e76d34ce3ca39bf9a382c50fd4848390.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
