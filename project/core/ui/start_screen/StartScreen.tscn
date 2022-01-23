@@ -120,7 +120,7 @@ curve = SubResource( 9 )
 script = ExtResource( 3 )
 
 [node name="PathFollow" type="PathFollow" parent="Viewport/Spatial/SharkPath"]
-transform = Transform( -0.167624, 0, 0.985848, 0, 1, 0, -0.985851, 0, -0.167623, 49.2682, 8.16584e-06, 2.46284 )
+transform = Transform( 0.0097611, 0, 0.99995, 0, 1, 0, -0.999952, 0, 0.00976108, 49.2682, 8.16584e-06, 2.46284 )
 rotation_mode = 4
 
 [node name="Shark" parent="Viewport/Spatial/SharkPath/PathFollow" instance=ExtResource( 4 )]
@@ -132,7 +132,7 @@ curve = SubResource( 16 )
 script = ExtResource( 3 )
 
 [node name="PathFollow" type="PathFollow" parent="Viewport/Spatial/Path"]
-transform = Transform( 0.182254, 0, -0.983251, 0, 1, 0, 0.983252, 0, 0.182254, 0.257858, 0, 3.60992 )
+transform = Transform( 0.175094, 0, -0.984552, 0, 1, 0, 0.984552, 0, 0.175094, 0.257858, 0, 3.60992 )
 rotation_mode = 4
 
 [node name="Shark" parent="Viewport/Spatial/Path/PathFollow" instance=ExtResource( 4 )]

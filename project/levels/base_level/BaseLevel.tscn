@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://core/player_boat/PlayerBoat.tscn" type="PackedScene" id=1]
 [ext_resource path="res://core/ui/hud/HUD.tscn" type="PackedScene" id=2]
@@ -63,7 +63,7 @@ noise = SubResource( 6 )
 
 [sub_resource type="ShaderMaterial" id=3]
 render_priority = -1
-shader = ExtResource( 24 )
+shader = ExtResource( 26 )
 shader_param/speed = 0.005
 shader_param/color = Color( 0.0352941, 0.658824, 0.929412, 0.635294 )
 shader_param/deep_water = Color( 0.223529, 0.380392, 0.490196, 0.85098 )
@@ -116,7 +116,6 @@ script = ExtResource( 23 )
 
 [node name="SaleOfFish" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 24 )
-bus = "SaleOfFish"
 
 [node name="Fuel" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 25 )
@@ -169,7 +168,7 @@ far = 300.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 128.098, 0, 114.235 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 25 )
+environment = ExtResource( 27 )
 
 [node name="GasStation" parent="." instance=ExtResource( 14 )]
 transform = Transform( -0.902923, 0, 0.429802, 0, 1, 0, -0.429802, 0, -0.902923, 74.3438, 0.976416, 79.3104 )
