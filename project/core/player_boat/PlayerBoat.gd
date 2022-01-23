@@ -1,8 +1,8 @@
 extends KinematicBody
 
-const FUEL_PENALTY = 340
-const SHARK_PENALTY = 300
-const COLOR_BONUS_EXP = 1.8
+const FUEL_PENALTY = 250
+const SHARK_PENALTY = 200
+const COLOR_BONUS_EXP = 2.5
 
 signal area_changed
 signal hold_changed
@@ -29,7 +29,7 @@ onready var engine_noise := $EngineNoise
 onready var text_popup := $TextPopup
 
 var is_disabled := false
-var points = 500
+var points = 300
 var boat_hold := []
 var danger_pool_timeout = 0.5
 var current_move_direction = Vector3.ZERO
@@ -212,11 +212,12 @@ func stock_fish(stock: Stock):
 			if color_bonuses.has(fish_meta.fish_type):
 				color_bonuses[fish_meta.fish_type] += 1
 			else:
-				color_bonuses[fish_meta.fish_type] = 0
+				color_bonuses[fish_meta.fish_type] = 1
 	var bonus = 0
 	for color_bonus_amount in color_bonuses.values():
 		bonus += ceil(pow(color_bonus_amount, COLOR_BONUS_EXP))
 	if sold_sum > 0:
+		points += bonus
 		emit_signal("hold_changed", boat_hold)
 		emit_signal("points_changed", points)
 		var text = "PROFIT %s$ + COLOR BONUS %s$" % [sold_sum, bonus] if bonus > 0 else "PROFIT %s$" % [sold_sum]

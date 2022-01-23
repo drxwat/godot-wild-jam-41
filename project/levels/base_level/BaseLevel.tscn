@@ -258,7 +258,7 @@ __meta__ = {
 [node name="WastedOverlay" parent="UI" instance=ExtResource( 17 )]
 
 [node name="PlayerBoat" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 109.057, 0.412685, 198.946 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 142.806, 0.412685, 226.769 )
 navigation_node_path = NodePath("../Navigation")
 
 [node name="Camera" type="Camera" parent="PlayerBoat"]
@@ -509,13 +509,20 @@ size = Vector2( 1438, 175 )
 text = "GAS STATION (0.5$)"
 
 [node name="Fish" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 136.958, 0, 194.917 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 114.409, 0, 181.245 )
 
-[node name="Fish2" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 147.574, 0, 172.057 )
+[node name="Fish7" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 176.037, 0, 179.462 )
 fish_type = 1
 
-[node name="Particles" parent="Fish2" index="0"]
+[node name="Particles" parent="Fish7" index="0"]
+draw_pass_1 = ExtResource( 19 )
+
+[node name="Fish5" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 149.889, 0, 199.948 )
+fish_type = 1
+
+[node name="Particles" parent="Fish5" index="0"]
 draw_pass_1 = ExtResource( 19 )
 
 [node name="Fish3" parent="." instance=ExtResource( 10 )]
@@ -538,5 +545,6 @@ draw_pass_1 = ExtResource( 21 )
 [editable path="HouseBlue/TextPopup"]
 [editable path="GasStation2/TextPopup"]
 [editable path="Fish"]
-[editable path="Fish2"]
+[editable path="Fish7"]
+[editable path="Fish5"]
 [editable path="Fish3"]
