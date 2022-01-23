@@ -20,8 +20,8 @@ func on_wasted(reason: String, _money: int, _penalty: int):
 
 
 func on_shark_chasing():
-	pass
+	$Alarm.play()
 	
 	
 func on_shark_lose_target():
-	pass
+	$Alarm.stop()
