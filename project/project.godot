@@ -57,7 +57,7 @@ _global_script_class_icons={
 [application]
 
 config/name="godot-wild-jam-41"
-run/main_scene="res://levels/base_level/BaseLevel.tscn"
+run/main_scene="res://core/ui/start_screen/StartScreen.tscn"
 config/icon="res://icon.png"
 
 [autoload]

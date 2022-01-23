@@ -1,7 +1,9 @@
 extends PanelContainer
 
 
-func show():
+func show_overlay():
+	print("GAME OVER")
+	show()
 	$AnimationPlayer.play("show")
 
 

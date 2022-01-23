@@ -38,7 +38,7 @@ var boat_hold := []
 var danger_pool_timeout = 0.5
 var current_move_direction = Vector3.ZERO
 var max_fuel_time := 120.0
-var fuel = max_fuel_time / 3
+var fuel = max_fuel_time / 1.5
 var emit_fuel_change = FUEL_EMIT_PERIOD
 var danger_area = Enums.AreaType.SAFE
 var gas_station
@@ -94,6 +94,8 @@ func die_from_shark():
 	engine_noise.stop()
 	if points >= SHARK_PENALTY:
 		emit_signal("wasted", "ROBED BY SHARK", points, SHARK_PENALTY)
+	else:
+		emit_signal("game_over")
 
 func respawn(position: Vector3, penalty: int):
 	is_disabled = false

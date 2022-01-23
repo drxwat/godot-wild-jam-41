@@ -17,6 +17,9 @@ func _ready():
 
 
 func on_wasted(reason: String, _money: int, _penalty: int):
+	if not $GameOver.playing:
+		$GameOver.play()
+	
 	wasted_overlay.show_overlay(reason, _money, _penalty)
 	yield(wasted_overlay, "penalty_finished")
 	player.respawn(initial_position, _penalty)
@@ -49,4 +52,5 @@ func on_fish_sell():
 		$SaleOfFish.play()
 
 func on_fish_pick_up():
-	pass
+	if not $FishSound.playing:
+		$FishSound.play()
