@@ -5,7 +5,7 @@ var fish_meta: FishMeta
 var fish_images = {
 	Enums.FishType.BLUE: preload("res://assets/ui/blue_fish.png"),
 	Enums.FishType.RED: preload("res://assets/ui/red_fish.png"),
-	Enums.FishType.GOLD: preload("res://assets/ui/red_fish.png"),
+	Enums.FishType.GOLD: preload("res://assets/ui/gold_fish.png"),
 }
 
 var update_period := 1.0

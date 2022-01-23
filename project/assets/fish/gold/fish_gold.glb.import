@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/FishV1.fbx-ac71344f7cefd62284f8127e40282c1a.scn"
+path="res://.import/fish_gold.glb-175ec62ad3d7c630a18962acb903f840.scn"
 
 [deps]
 
-source_file="res://assets/fish/FishV1.fbx"
-dest_files=[ "res://.import/FishV1.fbx-ac71344f7cefd62284f8127e40282c1a.scn" ]
+source_file="res://assets/fish/gold/fish_gold.glb"
+dest_files=[ "res://.import/fish_gold.glb-175ec62ad3d7c630a18962acb903f840.scn" ]
 
 [params]
 
